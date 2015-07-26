@@ -37,9 +37,8 @@ namespace Blackfeather.Security.Web
             if (autogenKeysFieldInfo != null)
             {
                 var machineAutogenKeys = (byte[])autogenKeysFieldInfo.GetValue(null);
-
-                Buffer.BlockCopy(machineAutogenKeys, 0, machineValidationKey, 0, MACHINE_VALIDATION_KEY_SIZE);
-                Buffer.BlockCopy(machineAutogenKeys, MACHINE_VALIDATION_KEY_SIZE, machineDecryptionKey, 0, MACHINE_DECRYPTION_KEY_SIZE);
+                machineValidationKey = machineAutogenKeys.Slice(0, MACHINE_VALIDATION_KEY_SIZE);
+                machineDecryptionKey = machineAutogenKeys.Slice(MACHINE_VALIDATION_KEY_SIZE, MACHINE_VALIDATION_KEY_SIZE + MACHINE_DECRYPTION_KEY_SIZE);
                 var virtualPathHash = StringComparer.InvariantCultureIgnoreCase.GetHashCode(HttpRuntime.AppDomainAppVirtualPath);
 
                 machineValidationKey[0] = (byte)(virtualPathHash & 0xff);
