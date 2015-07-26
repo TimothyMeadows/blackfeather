@@ -136,7 +136,6 @@ namespace Blackfeather.Security.Web
             var machineKeyVerifier = machineValidationKey.ToHash(Hash.DigestType.Tiger,
                 KeyDevination.DevinationType.Pbkdf2, sharedSalt).Data.ToHex();
             var sessionIdentifiableData = (context.Request.UserAgent + context.Request.UserHostAddress).ToHash(Hash.DigestType.Tiger, KeyDevination.DevinationType.Pbkdf2, sharedSalt);
-
             var sessionId = sessionData.ToCipher(Cryptology.CipherDigestType.Tiger,
                 KeyDevination.DevinationType.Pbkdf2, Cryptology.CipherType.AesCtr, Cryptology.CipherPaddingType.None,
                 machineKey + machineKeyVerifier + sessionIdentifiableData, sharedSalt);
@@ -162,6 +161,7 @@ namespace Blackfeather.Security.Web
                 case HttpCookieMode.AutoDetect:
                 case HttpCookieMode.UseDeviceProfile:
                     SaveSessionToCookieOrQueryId(context, id, context.Request.Browser.Cookies);
+                    redirected = !context.Request.Browser.Cookies;
                     break;
             }
         }
