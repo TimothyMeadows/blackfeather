@@ -34,6 +34,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blackfeather.Log", "Blackfeather.Log\Blackfeather.Log.csproj", "{2CD7F90B-34DA-4F5F-9971-A3A8FF0AADB4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blackfeather.Log.EventUtil", "Blackfeather.Log.EventUtil\Blackfeather.Log.EventUtil.csproj", "{DA4BB1D2-AABF-4D22-8D8D-2450F11E33CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,6 +80,14 @@ Global
 		{8CB65682-DE59-4F15-AF80-73826ADB8DBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CB65682-DE59-4F15-AF80-73826ADB8DBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8CB65682-DE59-4F15-AF80-73826ADB8DBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CD7F90B-34DA-4F5F-9971-A3A8FF0AADB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CD7F90B-34DA-4F5F-9971-A3A8FF0AADB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CD7F90B-34DA-4F5F-9971-A3A8FF0AADB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CD7F90B-34DA-4F5F-9971-A3A8FF0AADB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA4BB1D2-AABF-4D22-8D8D-2450F11E33CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA4BB1D2-AABF-4D22-8D8D-2450F11E33CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA4BB1D2-AABF-4D22-8D8D-2450F11E33CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA4BB1D2-AABF-4D22-8D8D-2450F11E33CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
