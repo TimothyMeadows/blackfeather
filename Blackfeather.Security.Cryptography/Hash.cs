@@ -26,9 +26,6 @@ using Org.BouncyCastle.Crypto.Digests;
 
 namespace Blackfeather.Security.Cryptography
 {
-    /// <summary>
-    /// Hashing
-    /// </summary>
     public static class Hash
     {
         public enum DigestType
@@ -60,12 +57,12 @@ namespace Blackfeather.Security.Cryptography
         }
 
         /// <summary>
-        /// Hashing
+        /// Hash string data based on the supported digest types, also, devinates the key data based on supported devination types.
         /// </summary>
-        /// <param name="data">Data of any encoding type</param>
-        /// <param name="digestType">Hashing algorithm</param>
-        /// <param name="salt">Optional, supplied 8 byte salt, one will be auto-generated if not supplied</param>
-        /// <returns>SecureData object</returns>
+        /// <param name="data">Data of any encoding type.</param>
+        /// <param name="digestType">Supported digest type.</param>
+        /// <param name="salt">Optional, supplied 8 byte salt, one will be auto-generated if not supplied.</param>
+        /// <returns>SaltedData</returns>
         public static SaltedData ToHash(this string data, DigestType digestType, KeyDevination.DevinationType divinationType, byte[] salt = null)
         {
             var saltedData = default(SaltedData);
@@ -95,6 +92,13 @@ namespace Blackfeather.Security.Cryptography
             return saltedData;
         }
 
+        /// <summary>
+        /// Hash byte data based on the supported digest types, also, devinates the key data based on supported devination types.
+        /// </summary>
+        /// <param name="data">Data of any encoding type.</param>
+        /// <param name="digestType">Supported digest type.</param>
+        /// <param name="salt">Optional, supplied 8 byte salt, one will be auto-generated if not supplied.</param>
+        /// <returns>SaltedData</returns>
         public static SaltedData ToHash(this byte[] data, DigestType digestType, KeyDevination.DevinationType divinationType, byte[] salt = null)
         {
             var saltedData = default(SaltedData);

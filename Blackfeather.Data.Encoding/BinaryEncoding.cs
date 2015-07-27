@@ -8,6 +8,9 @@ namespace Blackfeather.Data.Encoding
 {
     public static class BinaryEncoding
     {
+        /// <summary>
+        /// Supported encoding types.
+        /// </summary>
         public enum EncodingType
         {
             Hex = 1,
@@ -15,6 +18,12 @@ namespace Blackfeather.Data.Encoding
             Base64 = 3
         }
 
+        /// <summary>
+        /// Encode a string from bytes using a supported type.
+        /// </summary>
+        /// <param name="source">Bytes to be encoded.</param>
+        /// <param name="type">Supported encoding type.</param>
+        /// <returns>String data.</returns>
         public static string ToString(byte[] source, EncodingType type)
         {
             var content = string.Empty;
@@ -34,6 +43,12 @@ namespace Blackfeather.Data.Encoding
             return content;
         }
 
+        /// <summary>
+        /// Decode from a string using a supported type.
+        /// </summary>
+        /// <param name="source">Bytes to be encoded.</param>
+        /// <param name="type">Supported encoding type.</param>
+        /// <returns>Byte data.</returns>
         public static byte[] FromString(string source, EncodingType type)
         {
             byte[] content = null;
@@ -53,6 +68,11 @@ namespace Blackfeather.Data.Encoding
             return content;
         }
 
+        /// <summary>
+        /// Encode byte data to hex.
+        /// </summary>
+        /// <param name="source">Byte data to be encoded.</param>
+        /// <returns>String data.</returns>
         public static string ToHex(this byte[] source)
         {
             if (source == null)
@@ -69,6 +89,11 @@ namespace Blackfeather.Data.Encoding
             return hex.ToString();
         }
 
+        /// <summary>
+        /// Decode string data from hex.
+        /// </summary>
+        /// <param name="source">Byte data to be encoded.</param>
+        /// <returns>Byte data.</returns>
         public static byte[] FromHex(this string source)
         {
             if (string.IsNullOrEmpty(source))
@@ -85,21 +110,41 @@ namespace Blackfeather.Data.Encoding
             return bytes;
         }
 
+        /// <summary>
+        /// Encode byte data to Base32.
+        /// </summary>
+        /// <param name="source">Byte data to be encoded.</param>
+        /// <returns>String data.</returns>
         public static string ToBase32(this byte[] source)
         {
             return source == null ? string.Empty : Base32.ToBase32String(source);
         }
 
+        /// <summary>
+        /// Decode string data from Base32.
+        /// </summary>
+        /// <param name="source">String data to be encoded.</param>
+        /// <returns>Byte data.</returns>
         public static byte[] FromBase32(this string source)
         {
             return string.IsNullOrEmpty(source) ? null : Base32.FromBase32String(source);
         }
 
+        /// <summary>
+        /// Encode byte data to Base64.
+        /// </summary>
+        /// <param name="source">Byte data to be encoded.</param>
+        /// <returns>String data.</returns>
         public static string ToBase64(this byte[] source)
         {
             return source == null ? string.Empty : Convert.ToBase64String(source);
         }
 
+        /// <summary>
+        /// Decode string data from Base64.
+        /// </summary>
+        /// <param name="source">String data to be encoded.</param>
+        /// <returns>Byte data.</returns>
         public static byte[] FromBase64(this string source)
         {
             return string.IsNullOrEmpty(source) ? null : Convert.FromBase64String(source);

@@ -10,6 +10,9 @@ namespace Blackfeather.Data.Storage
 {
     public static class ManagedMemoryStorage
     {
+        /// <summary>
+        /// Supported content data types
+        /// </summary>
         public enum ContentDataType
         {
             Text = 1,
@@ -18,6 +21,13 @@ namespace Blackfeather.Data.Storage
             Json = 4
         }
 
+        /// <summary>
+        /// Load a managed memory object from disk.
+        /// </summary>
+        /// <param name="memory">Memory object.</param>
+        /// <param name="type">Supported content type.</param>
+        /// <param name="path">Path to memory object on disk.</param>
+        /// <param name="append">Should memory be cleared or left intact before loading?</param>
         public static void Load(this ManagedMemory memory, ContentDataType type, string path, bool append = false)
         {
             if (string.IsNullOrEmpty(path))
@@ -47,6 +57,13 @@ namespace Blackfeather.Data.Storage
             }
         }
 
+        /// <summary>
+        /// Save a managed memory object from disk.
+        /// </summary>
+        /// <param name="memory">Memory object.</param>
+        /// <param name="type">Supported content type.</param>
+        /// <param name="path">Path to memory object on disk.</param>
+        /// <param name="pointer">Optional, pointer you wish to write from.</param>
         public static void Save(this ManagedMemory memory, ContentDataType type, string path, string pointer = null)
         {
             if (string.IsNullOrEmpty(path))

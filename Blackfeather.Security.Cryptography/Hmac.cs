@@ -61,12 +61,12 @@ namespace Blackfeather.Security.Cryptography
         }
 
         /// <summary>
-        /// HmacSHA512
+        /// Hash+Mac string data based on the supported digest types, also, devinates the key data based on supported devination types.
         /// </summary>
         /// <param name="data">Data of any encoding type</param>
-        /// <param name="key">Password to lock the hash with</param>
+        /// <param name="key">Hash password. Will be devinated using the supplied devination type.</param>
         /// <param name="salt">Optional, supplied 8 byte salt, one will be auto-generated if not supplied</param>
-        /// <returns>DataWithSalt object</returns>
+        /// <returns>SaltedData</returns>
         public static SaltedData ToHmac(this string data, DigestType digestType, KeyDevination.DevinationType devinationType, string key, byte[] salt = null)
         {
             var saltedData = default(SaltedData);
@@ -96,6 +96,13 @@ namespace Blackfeather.Security.Cryptography
             return saltedData;
         }
 
+        /// <summary>
+        /// Hash+Mac string data based on the supported digest types, also, devinates the key data based on supported devination types.
+        /// </summary>
+        /// <param name="data">Data of any encoding type</param>
+        /// <param name="key">Hash password. Will be devinated using the supplied devination type.</param>
+        /// <param name="salt">Optional, supplied 8 byte salt, one will be auto-generated if not supplied</param>
+        /// <returns>SaltedData</returns>
         public static SaltedData ToHmac(this string data, DigestType digestType, KeyDevination.DevinationType devinationType, byte[] key, byte[] salt = null)
         {
             var saltedData = default(SaltedData);
@@ -125,6 +132,13 @@ namespace Blackfeather.Security.Cryptography
             return saltedData;
         }
 
+        /// <summary>
+        /// Hash+Mac byte data based on the supported digest types, also, devinates the key data based on supported devination types.
+        /// </summary>
+        /// <param name="data">Data of any encoding type</param>
+        /// <param name="key">Hash password. Will be devinated using the supplied devination type.</param>
+        /// <param name="salt">Optional, supplied 8 byte salt, one will be auto-generated if not supplied</param>
+        /// <returns>SaltedData</returns>
         public static SaltedData ToHmac(this byte[] data, DigestType digestType, KeyDevination.DevinationType devinationType, string key, byte[] salt = null)
         {
             var saltedData = default(SaltedData);
@@ -154,6 +168,13 @@ namespace Blackfeather.Security.Cryptography
             return saltedData;
         }
 
+        /// <summary>
+        /// Hash+Mac byte data based on the supported digest types, also, devinates the key data based on supported devination types.
+        /// </summary>
+        /// <param name="data">Data of any encoding type</param>
+        /// <param name="key">Hash password. Will be devinated using the supplied devination type.</param>
+        /// <param name="salt">Optional, supplied 8 byte salt, one will be auto-generated if not supplied</param>
+        /// <returns>SaltedData</returns>
         public static SaltedData ToHmac(this byte[] data, DigestType digestType, KeyDevination.DevinationType devinationType, byte[] key, byte[] salt = null)
         {
             var saltedData = default(SaltedData);

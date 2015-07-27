@@ -27,18 +27,18 @@ using System;
 namespace Blackfeather.Security.Cryptography
 {
     /// <summary>
-    /// Serializable structure that holds secure data and it's conjoined salting.
+    /// Serializable structure that holds salted data and it's conjoined salting.
     /// </summary>
     [Serializable]
     public struct SaltedData
     {
         /// <summary>
-        /// Secure data
+        /// Salted data
         /// </summary>
         public byte[] Data;
 
         /// <summary>
-        /// Secure data salting
+        /// Salted data salting
         /// </summary>
         public byte[] Salt;
     }

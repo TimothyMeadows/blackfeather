@@ -24,7 +24,7 @@
 namespace Blackfeather.Security.Cryptography
 {
     /// <summary>
-    /// Secure Random Number Generator
+    /// Secure random number generator
     /// </summary>
     public static class SecureRandom
     {

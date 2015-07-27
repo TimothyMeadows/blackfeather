@@ -1,4 +1,28 @@
-﻿using System;
+﻿/* 
+ The MIT License (MIT)
+
+ Copyright (c) 2013 - 2015 Timothy D Meadows II
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
@@ -16,6 +40,14 @@ using Blackfeather.Security.Cryptography;
 
 namespace Blackfeather.Security.Web
 {
+    // BUG: If a user's session is greater than session age but extend's into the next calendar day. It will expire. Should last into the next calendar day, or, days if needed.
+    // TODO: Add more detailed error checking!
+    // TODO: Add extendable properties to Web.config for server admins, and, developers to control various settings such as:
+    //       1) Method of specifying a custom private, and, public key at any "resonable" size. Will also need to accept multiple input encoding types.
+    //       2) Method of specifying a custom shared salt. Will also need to accept multiple input encoding types.
+    //       3) Method of specifying a custom session age in minutes.
+    // TODO: Need the ability to attach custom identifiable data once a user has authenticated. This means the previously set session data will have to carry over to the new session id when modified! Will add the final layer of security if used.
+    // TODO: Get AUD001 audited by at least one other knowledgable developer or industry expert!
     public class BlackSessionId : ISessionIDManager
     {
         private const int MACHINE_VALIDATION_KEY_SIZE = 64;
@@ -64,7 +96,7 @@ namespace Blackfeather.Security.Web
                 appSettingsConfig = (AppSettingsSection)webConfig.GetSection("appSettings");
             }
 
-            sharedSalt = machineValidationKey.Slice(4, 8).Append(machineDecryptionKey.Slice(4, 8));
+            sharedSalt = machineValidationKey.Slice(4, 8).Append(machineDecryptionKey.Slice(4, 8)); // AUD001: Needs audit, but should be safe?
         }
 
         public bool InitializeRequest(HttpContext context, bool suppressAutoDetectRedirect, out bool supportSessionIDReissue)
@@ -159,7 +191,7 @@ namespace Blackfeather.Security.Web
                     redirected = true;
                     break;
                 case HttpCookieMode.AutoDetect:
-                case HttpCookieMode.UseDeviceProfile:
+                case HttpCookieMode.UseDeviceProfile: // Seems to be the same thing as auto detect?
                     SaveSessionToCookieOrQueryId(context, id, context.Request.Browser.Cookies);
                     redirected = !context.Request.Browser.Cookies;
                     break;
@@ -220,7 +252,7 @@ namespace Blackfeather.Security.Web
         {
             switch (sessionStateConfig.Cookieless)
             {
-                case HttpCookieMode.UseDeviceProfile:
+                case HttpCookieMode.UseDeviceProfile: // Seems to be the same thing as auto detect?
                 case HttpCookieMode.AutoDetect:
                 case HttpCookieMode.UseCookies:
                     if (context.Response.Cookies.AllKeys.Contains(sessionStateConfig.CookieName))
@@ -269,7 +301,7 @@ namespace Blackfeather.Security.Web
             return ValidateTimeForSingleDay(sessionDateTime);
         }
 
-        public bool ValidateTimeForSingleDay(DateTime dateTime)
+        public bool ValidateTimeForSingleDay(DateTime dateTime) // Temporary method until a proper one can be written. Good for testing though!
         {
             var currentDataTime = DateTime.Now;
             if (currentDataTime.Date.CompareTo(dateTime.Date) == 0)

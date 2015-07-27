@@ -32,8 +32,16 @@ using Org.BouncyCastle.Crypto;
 
 namespace Blackfeather.Security.Cryptography
 {
+    // TODO: Add more detailed error checking!
+
+    /// <summary>
+    /// Blackfeather Cryptology Dependancy Injectable Class (Powered By BounceCastle)
+    /// </summary>
     public static class Cryptology
     {
+        /// <summary>
+        /// Supported cipher types
+        /// </summary>
         public enum CipherType
         {
             AesCtr = 1,
@@ -47,6 +55,9 @@ namespace Blackfeather.Security.Cryptography
             CamelliaOfb = 9
         }
 
+        /// <summary>
+        /// Supported digest types
+        /// </summary>
         public enum CipherDigestType
         {
             Sha256 = 1,
@@ -54,6 +65,9 @@ namespace Blackfeather.Security.Cryptography
             Tiger = 3
         }
 
+        /// <summary>
+        /// Supported padding types
+        /// </summary>
         public enum CipherPaddingType
         {
             None = 1,
@@ -62,24 +76,72 @@ namespace Blackfeather.Security.Cryptography
             Iso10126 = 4,
         }
 
+        /// <summary>
+        /// Encrypt string data with a supported cipher, authenticate the cipher using a supported digest type, devinate the cipher password with a supported devination type, and, finally pad a cipher using a supported padding type.
+        /// </summary>
+        /// <param name="data">String data.</param>
+        /// <param name="digestType">Supported digest types.</param>
+        /// <param name="devinationType">Supported devination types.</param>
+        /// <param name="cipherType">Supported cipher types.</param>
+        /// <param name="paddingType">Supported padding types.</param>
+        /// <param name="password">Cipher password. Will be devinated using the supplied devination type.</param>
+        /// <param name="salt">Cipher salt to be used, should be proper format for the cipher type. (Note: Normally 8, or, 14 bytes)</param>
+        /// <param name="secondaryVerifier">Secondary data you wish to use to validate the cipher. This is a secondary validation check. The cipher binary is already validated. (Note: This will increase the size of the cipher)</param>
+        /// <returns>SaltedData</returns>
         public static SaltedData ToCipher(this string data, CipherDigestType digestType, KeyDevination.DevinationType devinationType, CipherType cipherType, CipherPaddingType paddingType, string password, byte[] salt, string secondaryVerifier = null)
         {
             CheckCipherSettings(cipherType, paddingType, data.Length);
             return _ToCipher(data, digestType, devinationType, cipherType, paddingType, password, salt, secondaryVerifier);
         }
 
+        /// <summary>
+        /// Encrypt byte data with a supported cipher, authenticate the cipher using a supported digest type, devinate the cipher password with a supported devination type, and, finally pad a cipher using a supported padding type.
+        /// </summary>
+        /// <param name="data">String data.</param>
+        /// <param name="digestType">Supported digest types.</param>
+        /// <param name="devinationType">Supported devination types.</param>
+        /// <param name="cipherType">Supported cipher types.</param>
+        /// <param name="paddingType">Supported padding types.</param>
+        /// <param name="password">Cipher password. Will be devinated using the supplied devination type.</param>
+        /// <param name="salt">Cipher salt to be used, should be proper format for the cipher type. (Note: Normally 8, or, 14 bytes)</param>
+        /// <param name="secondaryVerifier">Secondary data you wish to use to validate the cipher. This is a secondary validation check. The cipher binary is already validated. (Note: This will increase the size of the cipher)</param>
+        /// <returns>SaltedData</returns>
         public static SaltedData ToCipher(this byte[] data, CipherDigestType digestType, KeyDevination.DevinationType devinationType, CipherType cipherType, CipherPaddingType paddingType, string password, byte[] salt, string secondaryVerifier = null)
         {
             CheckCipherSettings(cipherType, paddingType, data.Length);
             return _ToCipher(data, digestType, devinationType, cipherType, paddingType, password, salt, secondaryVerifier);
         }
 
+        /// <summary>
+        /// Decrypt byte data with a supported cipher, authenticate the cipher using a supported digest type, devinate the cipher password with a supported devination type, and, finally pad a cipher using a supported padding type.
+        /// </summary>
+        /// <param name="data">String data.</param>
+        /// <param name="digestType">Supported digest types.</param>
+        /// <param name="devinationType">Supported devination types.</param>
+        /// <param name="cipherType">Supported cipher types.</param>
+        /// <param name="paddingType">Supported padding types.</param>
+        /// <param name="password">Cipher password. Will be devinated using the supplied devination type.</param>
+        /// <param name="salt">Cipher salt to be used, should be proper format for the cipher type. (Note: Normally 8, or, 14 bytes)</param>
+        /// <param name="secondaryVerifier">Secondary data you wish to use to validate the cipher. This is a secondary validation check. The cipher binary is already validated. (Note: This will increase the size of the cipher)</param>
+        /// <returns>Byte data</returns>
         public static byte[] FromCipher(this byte[] data, CipherDigestType digestType, KeyDevination.DevinationType devinationType, CipherType cipherType, CipherPaddingType paddingType, string password, byte[] salt, string secondaryVerifier = null)
         {
             CheckCipherSettings(cipherType, paddingType, data.Length);
             return _FromCipher(data, digestType, devinationType, cipherType, paddingType, password, salt, secondaryVerifier);
         }
 
+        /// <summary>
+        /// Decrypt string data with a supported cipher, authenticate the cipher using a supported digest type, devinate the cipher password with a supported devination type, and, finally pad a cipher using a supported padding type.
+        /// </summary>
+        /// <param name="data">String data.</param>
+        /// <param name="digestType">Supported digest types.</param>
+        /// <param name="devinationType">Supported devination types.</param>
+        /// <param name="cipherType">Supported cipher types.</param>
+        /// <param name="paddingType">Supported padding types.</param>
+        /// <param name="password">Cipher password. Will be devinated using the supplied devination type.</param>
+        /// <param name="salt">Cipher salt to be used, should be proper format for the cipher type. (Note: Normally 8, or, 14 bytes)</param>
+        /// <param name="secondaryVerifier">Secondary data you wish to use to validate the cipher. This is a secondary validation check. The cipher binary is already validated. (Note: This will increase the size of the cipher)</param>
+        /// <returns>Byte data</returns>
         public static string FromCipher(this string data, CipherDigestType digestType, KeyDevination.DevinationType devinationType, CipherType cipherType, CipherPaddingType paddingType, string password, byte[] salt, string secondaryVerifier = null)
         {
             CheckCipherSettings(cipherType, paddingType, data.Length);

@@ -28,23 +28,46 @@ using CryptSharp.Utility;
 
 namespace Blackfeather.Security.Cryptography
 {
-    /// <summary>
-    /// Key Devination Format
-    /// </summary>
     public static class KeyDevination
     {
+        /// <summary>
+        /// Supported devination types.
+        /// </summary>
         public enum DevinationType
         {
             Pbkdf2 = 1,
             Scrypt = 2
         }
 
+        /// <summary>
+        /// PBKDF2 Iteration Count.
+        /// </summary>
         public static int PBKDF2_ITERATIONS = 10000;
+        /// <summary>
+        /// Scrypt CPU Cost. (More = More Secure, Less = Less Secure)
+        /// </summary>
         public static int SCRYPT_COST = 262144;
+        /// <summary>
+        /// Scrypt blocksize used.
+        /// </summary>
         public static int SCRYPT_BLOCKSIZE = 8;
+        /// <summary>
+        /// Scrypt parallel threading
+        /// </summary>
         public static int SCRYPT_PARALLEL = 1;
+        /// <summary>
+        /// Scrypt max thread count
+        /// </summary>
         public static int? SCRYPT_MAXTHREADS = null;
 
+        /// <summary>
+        /// Devinate string data based on supported types.
+        /// </summary>
+        /// <param name="data">Data of any encoding type.</param>
+        /// <param name="type">Supported devination types.</param>
+        /// <param name="salt">Devination salt.</param>
+        /// <param name="length">Devination returned byte size.</param>
+        /// <returns>SaltedData</returns>
         public static SaltedData ToKeyDevination(this string data, DevinationType type, byte[] salt = null, int length = 128)
         {
             var saltedData = default(SaltedData);
@@ -62,6 +85,14 @@ namespace Blackfeather.Security.Cryptography
             return saltedData;
         }
 
+        /// <summary>
+        /// Devinate byte data based on supported types.
+        /// </summary>
+        /// <param name="data">Data of any encoding type.</param>
+        /// <param name="type">Supported devination types.</param>
+        /// <param name="salt">Devination salt.</param>
+        /// <param name="length">Devination returned byte size.</param>
+        /// <returns>SaltedData</returns>
         public static SaltedData ToKeyDevination(this byte[] data, DevinationType type, byte[] salt = null, int length = 128)
         {
             var saltedData = default(SaltedData);

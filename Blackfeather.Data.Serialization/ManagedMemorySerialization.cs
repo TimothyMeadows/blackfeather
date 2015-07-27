@@ -11,6 +11,12 @@ namespace Blackfeather.Data.Serialization
 {
     public static class ManagedMemorySerialization
     {
+        /// <summary>
+        /// Serialize data to text, or, basic CSV format.
+        /// </summary>
+        /// <param name="memory">Managed memory object.</param>
+        /// <param name="pointer">Optional, pointer you wish to serialize from.</param>
+        /// <returns></returns>
         public static string[] ToText(this ManagedMemory memory, string pointer = null)
         {
             var memoryPointer = new List<string> { "Pointer,Name,Value,Created,Updated,Accessed" };
@@ -20,6 +26,12 @@ namespace Blackfeather.Data.Serialization
             return memoryPointer.ToArray();
         }
 
+        /// <summary>
+        /// Serialize data from text, or, basic CSV format.
+        /// </summary>
+        /// <param name="memory">Managed memory object.</param>
+        /// <param name="value">String data, or, CSV data.</param>
+        /// <param name="append">Should memory be cleared or left intact before loading?</param>
         public static void FromText(this ManagedMemory memory, string value, bool append = false)
         {
             if (!append)
@@ -34,6 +46,12 @@ namespace Blackfeather.Data.Serialization
             }
         }
 
+        /// <summary>
+        /// Serialize data to binary format.
+        /// </summary>
+        /// <param name="memory">Managed memory object.</param>
+        /// <param name="pointer">Optional, pointer you wish to serialize from.</param>
+        /// <returns>Serialized bytes.</returns>
         public static byte[] ToBinary(this ManagedMemory memory, string pointer = null)
         {
             var memorySpace = new MemoryStream();
@@ -46,6 +64,12 @@ namespace Blackfeather.Data.Serialization
             return output;
         }
 
+        /// <summary>
+        /// Serialize from binary format data.
+        /// </summary>
+        /// <param name="memory">Managed memory object.</param>
+        /// <param name="value">String data, or, CSV data.</param>
+        /// <param name="append">Should memory be cleared or left intact before loading?</param>
         public static void FromBinary(this ManagedMemory memory, byte[] value, bool append = false)
         {
             var memorySpace = new MemoryStream(value);
@@ -55,6 +79,12 @@ namespace Blackfeather.Data.Serialization
             memory.Import(memorySpaces, append);
         }
 
+        /// <summary>
+        /// Serailize to xml format data.
+        /// </summary>
+        /// <param name="memory">Managed memory object.</param>
+        /// <param name="pointer">Optional, pointer you wish to serialize from.</param>
+        /// <returns>String data.</returns>
         public static string ToXml(this ManagedMemory memory, string pointer = null)
         {
             var memorySpace = new MemoryStream();
@@ -68,6 +98,12 @@ namespace Blackfeather.Data.Serialization
             return xml;
         }
 
+        /// <summary>
+        /// Serialize from xml format data.
+        /// </summary>
+        /// <param name="memory">Managed memory object.</param>
+        /// <param name="value">String data, or, CSV data.</param>
+        /// <param name="append">Should memory be cleared or left intact before loading?</param>
         public static void FromXml(this ManagedMemory memory, string value, bool append = false)
         {
             var memorySpace = new MemoryStream(Encoding.UTF8.GetBytes(value));
@@ -78,6 +114,12 @@ namespace Blackfeather.Data.Serialization
             memory.Import(memorySpaces, append);
         }
 
+        /// <summary>
+        /// Serialize to json format data.
+        /// </summary>
+        /// <param name="memory">Managed memory object.</param>
+        /// <param name="pointer">Optional, pointer you wish to serialize from.</param>
+        /// <returns>String data</returns>
         public static string ToJson(this ManagedMemory memory, string pointer = null)
         {
             var memorySpace = new MemoryStream();
@@ -91,6 +133,12 @@ namespace Blackfeather.Data.Serialization
             return json;
         }
 
+        /// <summary>
+        /// Serialize from json format data.
+        /// </summary>
+        /// <param name="memory">Managed memory object.</param>
+        /// <param name="value">String data, or, CSV data.</param>
+        /// <param name="append">Should memory be cleared or left intact before loading?</param>
         public static void FromJson(this ManagedMemory memory, string value, bool append = false)
         {
             var memorySpace = new MemoryStream(Encoding.UTF8.GetBytes(value));
