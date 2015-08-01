@@ -47,9 +47,6 @@ namespace Blackfeather.Security.Web
     // TODO: Get AUD001 audited by at least one other knowledgable developer or industry expert!
     public class BlackSessionId : ISessionIDManager
     {
-        private const int MACHINE_VALIDATION_KEY_SIZE = 64;
-        private const int MACHINE_DECRYPTION_KEY_SIZE = 24;
-
         private SessionStateSection sessionStateConfig;
         private AppSettingsSection appSettingsConfig;
         private byte[] machineValidationKey;
@@ -59,27 +56,9 @@ namespace Blackfeather.Security.Web
 
         public void Initialize()
         {
-            var autogenKeysFieldInfo = typeof(HttpRuntime).GetField("s_autogenKeys", BindingFlags.NonPublic | BindingFlags.Static);
-            machineValidationKey = new byte[MACHINE_VALIDATION_KEY_SIZE];
-            machineDecryptionKey = new byte[MACHINE_DECRYPTION_KEY_SIZE];
-
-            if (autogenKeysFieldInfo != null)
-            {
-                var machineAutogenKeys = (byte[])autogenKeysFieldInfo.GetValue(null);
-                machineValidationKey = machineAutogenKeys.Slice(0, MACHINE_VALIDATION_KEY_SIZE);
-                machineDecryptionKey = machineAutogenKeys.Slice(MACHINE_VALIDATION_KEY_SIZE, MACHINE_VALIDATION_KEY_SIZE + MACHINE_DECRYPTION_KEY_SIZE);
-                var virtualPathHash = StringComparer.InvariantCultureIgnoreCase.GetHashCode(HttpRuntime.AppDomainAppVirtualPath);
-
-                machineValidationKey[0] = (byte)(virtualPathHash & 0xff);
-                machineValidationKey[1] = (byte)((virtualPathHash & 0xff00) >> 8);
-                machineValidationKey[2] = (byte)((virtualPathHash & 0xff0000) >> 16);
-                machineValidationKey[3] = (byte)((virtualPathHash & 0xff000000) >> 24);
-
-                machineDecryptionKey[0] = (byte)(virtualPathHash & 0xff);
-                machineDecryptionKey[1] = (byte)((virtualPathHash & 0xff00) >> 8);
-                machineDecryptionKey[2] = (byte)((virtualPathHash & 0xff0000) >> 16);
-                machineDecryptionKey[3] = (byte)((virtualPathHash & 0xff000000) >> 24);
-            }
+            var machineKeys = MachineKeys.GetMachineKeys();
+            machineDecryptionKey = MachineKeys.GetMachineDecryptionKey(machineKeys);
+            machineValidationKey = MachineKeys.GetMachineValidationKey(machineKeys);
 
             if (sessionStateConfig == null)
             {
