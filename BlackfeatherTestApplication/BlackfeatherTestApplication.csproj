@@ -64,6 +64,14 @@
       <Project>{b45c696f-0acf-4902-920e-a7cc0321180c}</Project>
       <Name>Blackfeather.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Blackfeather.Log.EventUtil\Blackfeather.Log.EventUtil.csproj">
+      <Project>{da4bb1d2-aabf-4d22-8d8d-2450f11e33cd}</Project>
+      <Name>Blackfeather.Log.EventUtil</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Blackfeather.Log\Blackfeather.Log.csproj">
+      <Project>{2cd7f90b-34da-4f5f-9971-a3a8ff0aadb4}</Project>
+      <Name>Blackfeather.Log</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Blackfeather.Security.Cryptography\Blackfeather.Security.Cryptography.csproj">
       <Project>{97bec36a-3c26-47a3-8579-bc339e183b47}</Project>
       <Name>Blackfeather.Security.Cryptography</Name>

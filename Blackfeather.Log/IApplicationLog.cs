@@ -23,6 +23,8 @@ THE SOFTWARE.
 */
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Blackfeather.Log
 {
@@ -31,9 +33,17 @@ namespace Blackfeather.Log
         object Syncroot { get; }
 
         string Source { get; set; }
+        long MaximumKilobytes { get; set; }
 
         void Write(Exception exception);
         void Write(string message, LogEntryType type = LogEntryType.Information, int id = 0);
+        void Write(List<string> message, LogEntryType type = LogEntryType.Information, int id = 0);
+
+        List<EventLogEntry> Read(LogEntryType type, out int totalLogs, int? pageIndex = null, int? pageSize = null,
+            int? id = null, DateTime? from = null, DateTime? to = null,
+            List<string> searchList = null, int? index = null);
         void Validate();
+        void ClearSource();
+        void UpdateMaximumKilobytes();
     }
 }
