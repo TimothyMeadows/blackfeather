@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="BlackSessionId.cs" />
     <Compile Include="BlackSessionStore.cs" />
+    <Compile Include="MachineKeys.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
