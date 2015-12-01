@@ -9,7 +9,7 @@
     <projectUrl>https://www.blackfeatherinnovation.com/project/blackfeather</projectUrl>
     <iconUrl>https://repository.blackfeatherinnovation.com/asset/blackfeather/logo.png</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <description>Blackfeather .NET Framework (35, 40, 45, netcore)</description>
+    <description>Blackfeather .NET Framework (35, 40, 45, uap10.0)</description>
     <releaseNotes>https://repository.blackfeatherinnovation.com/asset/blackfeather/release-notes.txt</releaseNotes>
     <copyright>Copyright 2015</copyright>
     <tags>Blackfeather</tags>
