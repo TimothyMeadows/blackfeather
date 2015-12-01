@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Blackfeather</id>
+    <version>1.8.2</version>
+    <authors>Timothy D Meadows II</authors>
+    <owners>Blackfeather Innovation, LLC</owners>
+    <licenseUrl>https://repository.blackfeatherinnovation.com/asset/blackfeather/license.txt</licenseUrl>
+    <projectUrl>https://www.blackfeatherinnovation.com/project/blackfeather</projectUrl>
+    <iconUrl>https://repository.blackfeatherinnovation.com/asset/blackfeather/logo.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Blackfeather .NET Framework (35, 40, 45, netcore)</description>
+    <releaseNotes>https://repository.blackfeatherinnovation.com/asset/blackfeather/release-notes.txt</releaseNotes>
+    <copyright>Copyright 2015</copyright>
+    <tags>Blackfeather</tags>
+    <dependencies>
+      <dependency id="BouncyCastle" version="1.7.0" />
+      <dependency id="SCrypt" version="2.0.0.2" />
+    </dependencies>
+  </metadata>
+</package>

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Blackfeather-35</id>
+    <version>1.8.2</version>
+    <authors>Timothy D Meadows II</authors>
+    <owners>Blackfeather Innovation, LLC</owners>
+    <licenseUrl>http://blackfeatherinnovation.com/license/license.txt</licenseUrl>
+    <projectUrl>http://blackfeatherinnovation.com/project/blackfeather</projectUrl>
+    <iconUrl>http://blackfeatherinnovation.com/images/raven-logo-black.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Blackfeather Framework for .NET 3.5</description>
+    <releaseNotes>Added local nuget repo.</releaseNotes>
+    <copyright>Copyright 2015</copyright>
+    <tags>Blackfeather</tags>
+  </metadata>
+</package>
