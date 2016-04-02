@@ -19,7 +19,7 @@ using System.Linq;
 namespace Blackfeather.Data
 {
     /// <summary>
-    /// Parallel safe managed memory class with serialization support.
+    /// Managed memory class with serialization support.
     /// </summary>
     public sealed class ManagedMemory : IDisposable
     {
@@ -27,7 +27,7 @@ namespace Blackfeather.Data
         private List<ManagedMemorySpace> _memory = new List<ManagedMemorySpace>();
 
         /// <summary>
-        /// Parallel safe managed memory read.
+        /// Managed memory read.
         /// </summary>
         /// <typeparam name="T">Try and make sure your types are serializable.</typeparam>
         /// <param name="pointer">A reference pointer to the memory entry.</param>
@@ -58,7 +58,7 @@ namespace Blackfeather.Data
         }
 
         /// <summary>
-        /// Parallel safe managed memory bulk read.
+        /// Managed memory bulk read.
         /// </summary>
         /// <typeparam name="T">Try and make sure your types are serializable.</typeparam>
         /// <param name="pointer">A reference pointer to the memory entry.</param>
@@ -94,7 +94,7 @@ namespace Blackfeather.Data
         }
 
         /// <summary>
-        /// Parallel safe managed memory write.
+        /// Managed memory write.
         /// </summary>
         /// <param name="pointer">A reference pointer to the memory entry.</param>
         /// <param name="name">A name pointer to the memory entry.</param>
@@ -136,7 +136,7 @@ namespace Blackfeather.Data
         }
 
         /// <summary>
-        /// Parallel safe managed memory delete.
+        /// Managed memory delete.
         /// </summary>
         /// <param name="pointer">A reference pointer to the memory entry.</param>
         /// <param name="name">A name pointer to the memory entry.</param>
@@ -159,7 +159,7 @@ namespace Blackfeather.Data
 
 
         /// <summary>
-        /// Parallel safe managed memory bulk delete.
+        /// Managed memory bulk delete.
         /// </summary>
         /// <param name="pointer">A reference pointer to the memory entry.</param>
         public void DeleteAll(string pointer)
