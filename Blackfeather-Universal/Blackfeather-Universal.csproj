@@ -116,9 +116,11 @@
     <Compile Include="Data\Serialization\ManagedMemorySerialization.cs" />
     <Compile Include="Data\Storage\ManagedMemoryStorage.cs" />
     <Compile Include="Extention\AppendExtension.cs" />
+    <Compile Include="Extention\BinaryCompressionExtention.cs" />
     <Compile Include="Extention\CastExtention.cs" />
     <Compile Include="Extention\PrependExtension.cs" />
     <Compile Include="Extention\SliceExtension.cs" />
+    <Compile Include="Extention\StringCompressionExtention.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\Cryptography\Cryptology.cs" />
     <Compile Include="Security\Cryptography\Hash.cs" />
