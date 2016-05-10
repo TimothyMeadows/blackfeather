@@ -108,6 +108,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Compression\GZipCompression.cs" />
     <Compile Include="Data\Encoding\Base32.cs" />
     <Compile Include="Data\Encoding\BinaryEncoding.cs" />
     <Compile Include="Data\ManagedMemory.cs" />
