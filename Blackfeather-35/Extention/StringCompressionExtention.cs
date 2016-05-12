@@ -28,6 +28,11 @@ namespace Blackfeather.Extention
         /// <returns></returns>
         public static string Decompress(this string value, Encoding encoding = null)
         {
+            if (encoding == null)
+            {
+                encoding = new UTF8Encoding();
+            }
+
             return string.IsNullOrEmpty(value) ? string.Empty : GZipCompression.Decompress(value.FromBase64(), encoding);
         }
     }

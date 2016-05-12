@@ -4,6 +4,8 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
+using Org.BouncyCastle.Crypto.Engines;
+using Org.BouncyCastle.Crypto.Paddings;
 
 namespace Blackfeather.Data.Compression
 {
@@ -40,8 +42,9 @@ namespace Blackfeather.Data.Compression
                 using (var gzip = new GZipStream(memory, CompressionMode.Compress))
                 {
                     gzip.Write(value, 0, value.Length);
-                    return memory.ToArray();
                 }
+
+                return memory.ToArray();
             }
         }
 
@@ -58,7 +61,8 @@ namespace Blackfeather.Data.Compression
                 encoding = new UTF8Encoding();
             }
 
-            return encoding.GetString(Decompress(value));
+            var dataBytes = Decompress(value);
+            return encoding.GetString(dataBytes);
         }
 
         /// <summary>
@@ -68,12 +72,22 @@ namespace Blackfeather.Data.Compression
         /// <returns></returns>
         public static byte[] Decompress(byte[] value)
         {
-            using (var memory = new MemoryStream())
+            using (var memory = new MemoryStream(value))
             {
                 using (var gzip = new GZipStream(memory, CompressionMode.Decompress))
                 {
-                    gzip.Read(value, 0, value.Length);
-                    return memory.ToArray();
+                    using (var output = new MemoryStream())
+                    {
+                        var buffer = new byte[4096];
+                        int index;
+
+                        while ((index = gzip.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            output.Write(buffer, 0, index);
+                        }
+
+                        return output.ToArray();
+                    }
                 }
             }
         }
