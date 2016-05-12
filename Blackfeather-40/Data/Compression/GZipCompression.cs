@@ -68,7 +68,7 @@ namespace Blackfeather.Data.Compression
         /// <returns></returns>
         public static byte[] Decompress(byte[] value)
         {
-            using (var memory = new MemoryStream())
+            using (var memory = new MemoryStream(value))
             {
                 using (var gzip = new GZipStream(memory, CompressionMode.Decompress))
                 {
