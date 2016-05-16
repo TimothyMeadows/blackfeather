@@ -54,7 +54,9 @@ namespace Blackfeather.Data
             var accessedEntry = memorySet.First();
             accessedEntry.Accessed = DateTime.UtcNow.ToBinary();
 
-            return (T)Convert.ChangeType(accessedEntry.Value, typeof(T));
+            return typeof (T) == typeof (ManagedMemorySpace)
+                ? (T)Convert.ChangeType(accessedEntry, typeof(ManagedMemorySpace))
+                : (T)Convert.ChangeType(accessedEntry.Value, typeof(T));
         }
 
         /// <summary>
@@ -81,16 +83,19 @@ namespace Blackfeather.Data
                 return null;
             }
 
-            var memoryFragment = new List<object>();
+            var memoryFragment = new List<T>();
             memorySet.All(entry =>
             {
                 entry.Accessed = DateTime.UtcNow.ToBinary();
-                memoryFragment.Add(entry.Value);
+
+                memoryFragment.Add(typeof(T) == typeof(ManagedMemorySpace)
+                    ? (T)Convert.ChangeType(entry, typeof(ManagedMemorySpace))
+                    : (T)Convert.ChangeType(entry.Value, typeof(T)));
 
                 return true;
             });
 
-            return (T[])memoryFragment.ToArray().Cast<T>();
+            return memoryFragment.ToArray();
         }
 
         /// <summary>
@@ -135,6 +140,14 @@ namespace Blackfeather.Data
             spaces.ForEach(entry => Write(entry.Pointer, entry.Name, entry.Value, entry.Created, entry.Updated, entry.Accessed));
         }
 
+        public void WriteAll(string pointer, Dictionary<string, object> spaces)
+        {
+            foreach (var space in spaces)
+            {
+                Write(pointer, space.Key, space.Value);
+            }
+        }
+
         /// <summary>
         /// Managed memory delete.
         /// </summary>
@@ -154,7 +167,13 @@ namespace Blackfeather.Data
             }
 
             var memorySet = _memory.Where(entry => entry.Pointer == pointer).Where(entry => entry.Name == name);
-            _memory.Remove(memorySet.First());
+            var managedMemorySpaces = memorySet as ManagedMemorySpace[] ?? memorySet.ToArray();
+            if (!managedMemorySpaces.Any())
+            {
+                return;
+            }
+
+            _memory.Remove(managedMemorySpaces.First());
         }
 
 
