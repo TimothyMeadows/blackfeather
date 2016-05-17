@@ -51,7 +51,7 @@ namespace Blackfeather.Data
                 return default(T);
             }
 
-            var accessedEntry = memorySet.First();
+            var accessedEntry = memorySet.FirstOrDefault();
             accessedEntry.Accessed = DateTime.UtcNow.ToBinary();
 
             return typeof (T) == typeof (ManagedMemorySpace)
