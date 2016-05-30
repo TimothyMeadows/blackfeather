@@ -24,7 +24,7 @@ namespace Blackfeather.Data
     public sealed class ManagedMemory : IDisposable
     {
         private bool _disposed = false;
-        private List<ManagedMemorySpace> _memory = new List<ManagedMemorySpace>();
+        private SynchronizedCollection<ManagedMemorySpace> _memory = new SynchronizedCollection<ManagedMemorySpace>();
 
         /// <summary>
         /// Managed memory read.
@@ -223,7 +223,7 @@ namespace Blackfeather.Data
             }
             else
             {
-                _memory = new List<ManagedMemorySpace>(spaces);
+                _memory = new SynchronizedCollection<ManagedMemorySpace>(spaces);
             }
         }
 
