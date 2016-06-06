@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Blackfeather.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -7,6 +8,20 @@ namespace Blackfeather_35.Tests
     [TestClass]
     public class ManagedMemoryTests
     {
+        [TestMethod]
+        public void ParallelReadAndWrite()
+        {
+            var memory = new ManagedMemory();
+            Parallel.For(0, 111, i =>
+            {
+                memory.Write("Test" + i, "TestKey", "TestValue!");
+                var read = memory.Read<string>("Test" + i, "TestKey");
+
+                Assert.IsNotNull(read);
+                Assert.AreEqual(read, "TestValue!");
+            });
+        }
+
         [TestMethod]
         public void ReadAndWrite()
         {
