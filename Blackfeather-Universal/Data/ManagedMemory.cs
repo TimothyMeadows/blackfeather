@@ -28,7 +28,7 @@ using System.Linq;
 using Blackfeather.Extention;
 
 namespace Blackfeather.Data
-{ 
+{
     /// <summary>
     /// Parallel safe managed memory class
     /// </summary>
@@ -90,7 +90,9 @@ namespace Blackfeather.Data
             var accessedEntry = memorySet.Last().Value;
             accessedEntry.Accessed = DateTime.UtcNow.ToBinary();
 
-            return accessedEntry.Value.Cast<T>();
+            return typeof(T) == typeof(ManagedMemorySpace)
+                ? (T)Convert.ChangeType(accessedEntry, typeof(ManagedMemorySpace))
+                : (T)Convert.ChangeType(accessedEntry.Value, typeof(T));
         }
 
         /// <summary>
@@ -118,7 +120,9 @@ namespace Blackfeather.Data
                 var accessedEntry = entry.Value;
                 accessedEntry.Accessed = DateTime.UtcNow.ToBinary();
 
-                memoryFragment.Add(entry.Value);
+                memoryFragment.Add(typeof(T) == typeof(ManagedMemorySpace)
+                    ? (T)Convert.ChangeType(entry, typeof(ManagedMemorySpace))
+                    : (T)Convert.ChangeType(entry.Value, typeof(T)));
             });
 
             return memoryFragment.ToArray().Cast<T>();
@@ -166,7 +170,7 @@ namespace Blackfeather.Data
             if (!_memory.TryAdd(memoryAddress, entry))
             {
                 throw new Exception("Unable to pre-cache item into memory! Check that your max memory slots are large enough to fit your pre-allocated memory slots.");
-            }           
+            }
         }
 
         public void WriteAll(ManagedMemorySpace[] spaces)
