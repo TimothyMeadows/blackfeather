@@ -24,7 +24,7 @@ namespace Blackfeather.Data
     public sealed class ManagedMemory : IDisposable
     {
         private bool _disposed = false;
-        private List<ManagedMemorySpace> _memory = new List<ManagedMemorySpace>();
+        private SynchronizedCollection<ManagedMemorySpace> _memory = new SynchronizedCollection<ManagedMemorySpace>();
 
         /// <summary>
         /// Managed memory read.
@@ -35,26 +35,37 @@ namespace Blackfeather.Data
         /// <returns>A memory value with type T.</returns>
         public T Read<T>(string pointer, string name)
         {
-            if (_disposed)
+            lock (_memory)
             {
-                throw new ObjectDisposedException("Memory");
+                if (_disposed)
+                {
+                    throw new ObjectDisposedException("Memory");
+                }
+
+                SynchronizedCollection<ManagedMemorySpace> memoryPointer;
+                lock (_memory.SyncRoot)
+                {
+                    memoryPointer = new SynchronizedCollection<ManagedMemorySpace>(new object(), _memory.ToArray());
+                }
+
+                if (!memoryPointer.Any())
+                {
+                    return default(T);
+                }
+
+                var memorySet = memoryPointer.Where(entry => entry.Pointer == pointer).Where(entry => entry.Name == name);
+                if (!_memory.Any())
+                {
+                    return default(T);
+                }
+
+                var accessedEntry = memorySet.FirstOrDefault();
+                accessedEntry.Accessed = DateTime.UtcNow.ToBinary();
+
+                return typeof(T) == typeof(ManagedMemorySpace)
+                    ? (T)Convert.ChangeType(accessedEntry, typeof(ManagedMemorySpace))
+                    : (T)Convert.ChangeType(accessedEntry.Value, typeof(T));
             }
-
-            if (!_memory.Any())
-            {
-                return default(T);
-            }
-
-            var memorySet = _memory.Where(entry => entry.Pointer == pointer).Where(entry => entry.Name == name);
-            if (!_memory.Any())
-            {
-                return default(T);
-            }
-
-            var accessedEntry = memorySet.First();
-            accessedEntry.Accessed = DateTime.UtcNow.ToBinary();
-
-            return (T)Convert.ChangeType(accessedEntry.Value, typeof(T));
         }
 
         /// <summary>
@@ -81,16 +92,19 @@ namespace Blackfeather.Data
                 return null;
             }
 
-            var memoryFragment = new List<object>();
+            var memoryFragment = new List<T>();
             memorySet.All(entry =>
             {
                 entry.Accessed = DateTime.UtcNow.ToBinary();
-                memoryFragment.Add(entry.Value);
+
+                memoryFragment.Add(typeof(T) == typeof(ManagedMemorySpace)
+                    ? (T)Convert.ChangeType(entry, typeof(ManagedMemorySpace))
+                    : (T)Convert.ChangeType(entry.Value, typeof(T)));
 
                 return true;
             });
 
-            return (T[])memoryFragment.ToArray().Cast<T>();
+            return memoryFragment.ToArray();
         }
 
         /// <summary>
@@ -135,6 +149,14 @@ namespace Blackfeather.Data
             spaces.ForEach(entry => Write(entry.Pointer, entry.Name, entry.Value, entry.Created, entry.Updated, entry.Accessed));
         }
 
+        public void WriteAll(string pointer, Dictionary<string, object> spaces)
+        {
+            foreach (var space in spaces)
+            {
+                Write(pointer, space.Key, space.Value);
+            }
+        }
+
         /// <summary>
         /// Managed memory delete.
         /// </summary>
@@ -142,18 +164,28 @@ namespace Blackfeather.Data
         /// <param name="name">A name pointer to the memory entry.</param>
         public void Delete(string pointer, string name)
         {
-
             if (_disposed)
             {
                 throw new ObjectDisposedException("Memory");
             }
 
-            if (!_memory.Any())
+            SynchronizedCollection<ManagedMemorySpace> memoryPointer;
+            lock (_memory.SyncRoot)
+            {
+                memoryPointer = new SynchronizedCollection<ManagedMemorySpace>(new object(), _memory.ToArray());
+            }
+
+            if (!memoryPointer.Any())
             {
                 return;
             }
 
-            var memorySet = _memory.Where(entry => entry.Pointer == pointer).Where(entry => entry.Name == name);
+            var memorySet = memoryPointer.Where(entry => entry.Pointer == pointer).Where(entry => entry.Name == name);
+            if (!memorySet.Any())
+            {
+                return;
+            }
+
             _memory.Remove(memorySet.First());
         }
 
@@ -204,7 +236,7 @@ namespace Blackfeather.Data
             }
             else
             {
-                _memory = new List<ManagedMemorySpace>(spaces);
+                _memory = new SynchronizedCollection<ManagedMemorySpace>(spaces);
             }
         }
 
