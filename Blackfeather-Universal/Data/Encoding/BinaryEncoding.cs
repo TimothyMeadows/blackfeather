@@ -23,6 +23,7 @@
 */
 
 using System;
+using System.Linq;
 using System.Text;
 
 namespace Blackfeather.Data.Encoding
@@ -89,11 +90,6 @@ namespace Blackfeather.Data.Encoding
             return content;
         }
 
-        /// <summary>
-        /// Encode byte data to hex.
-        /// </summary>
-        /// <param name="source">Byte data to be encoded.</param>
-        /// <returns>String data.</returns>
         public static string ToHex(this byte[] source)
         {
             if (source == null)
@@ -122,13 +118,10 @@ namespace Blackfeather.Data.Encoding
                 return null;
             }
 
-            var bytes = new byte[source.Length / 2];
-            for (var i = 0; i < bytes.Length; i++)
-            {
-                bytes[i] = Convert.ToByte(source.Substring(i * 2, 2));
-            }
-
-            return bytes;
+            return Enumerable.Range(0, source.Length)
+                     .Where(x => x % 2 == 0)
+                     .Select(x => Convert.ToByte(source.Substring(x, 2), 16))
+                     .ToArray();
         }
 
         /// <summary>
