@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blackfeather-Universal", "Blackfeather-Universal\Blackfeather-Universal.csproj", "{65C6EC52-DAAF-49BB-A64C-F3DE2E78E7FB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blackfeather-35", "Blackfeather-35\Blackfeather-35.csproj", "{98DA5FD9-6503-467F-9AD5-71BA4682DFAF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blackfeather-40", "Blackfeather-40\Blackfeather-40.csproj", "{1AE9452A-D496-4F93-AA9D-54AD720AF754}"
@@ -32,22 +30,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{65C6EC52-DAAF-49BB-A64C-F3DE2E78E7FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{65C6EC52-DAAF-49BB-A64C-F3DE2E78E7FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{65C6EC52-DAAF-49BB-A64C-F3DE2E78E7FB}.Debug|ARM.ActiveCfg = Debug|ARM
-		{65C6EC52-DAAF-49BB-A64C-F3DE2E78E7FB}.Debug|ARM.Build.0 = Debug|ARM
-		{65C6EC52-DAAF-49BB-A64C-F3DE2E78E7FB}.Debug|x64.ActiveCfg = Debug|x64
-		{65C6EC52-DAAF-49BB-A64C-F3DE2E78E7FB}.Debug|x64.Build.0 = Debug|x64
-		{65C6EC52-DAAF-49BB-A64C-F3DE2E78E7FB}.Debug|x86.ActiveCfg = Debug|x86
-		{65C6EC52-DAAF-49BB-A64C-F3DE2E78E7FB}.Debug|x86.Build.0 = Debug|x86
-		{65C6EC52-DAAF-49BB-A64C-F3DE2E78E7FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{65C6EC52-DAAF-49BB-A64C-F3DE2E78E7FB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{65C6EC52-DAAF-49BB-A64C-F3DE2E78E7FB}.Release|ARM.ActiveCfg = Release|ARM
-		{65C6EC52-DAAF-49BB-A64C-F3DE2E78E7FB}.Release|ARM.Build.0 = Release|ARM
-		{65C6EC52-DAAF-49BB-A64C-F3DE2E78E7FB}.Release|x64.ActiveCfg = Release|x64
-		{65C6EC52-DAAF-49BB-A64C-F3DE2E78E7FB}.Release|x64.Build.0 = Release|x64
-		{65C6EC52-DAAF-49BB-A64C-F3DE2E78E7FB}.Release|x86.ActiveCfg = Release|x86
-		{65C6EC52-DAAF-49BB-A64C-F3DE2E78E7FB}.Release|x86.Build.0 = Release|x86
 		{98DA5FD9-6503-467F-9AD5-71BA4682DFAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{98DA5FD9-6503-467F-9AD5-71BA4682DFAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98DA5FD9-6503-467F-9AD5-71BA4682DFAF}.Debug|ARM.ActiveCfg = Debug|Any CPU
