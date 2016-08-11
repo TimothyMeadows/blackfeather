@@ -4,7 +4,6 @@ var Blackfeather = (function () {
 
     Blackfeather.Data = Blackfeather.Data || {};
     Blackfeather.Serialization = Blackfeather.Serialization || {};
-	Blackfeather.Storage = Blackfeather.Storage  || {};
 
 	/* Serialization */
 	Blackfeather.Serialization.ManagedMemory = function (json, instance) {
