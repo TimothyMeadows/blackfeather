@@ -5,4 +5,5 @@ This framework is a complication of code, features and concepts from Blackfeathe
 
 Please report any bugs you find.
 
-Documention coming soon...
+You can find releases in the nuget repository:
+https://repository.blackfeatherinnovation.com/
