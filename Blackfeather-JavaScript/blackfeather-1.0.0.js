@@ -4970,8 +4970,11 @@ var Blackfeather = (function () {
             };
         },
         Kdf: function () {
-            this.Compute = function (data, salt, iterations) {
-                return CryptoJS.enc.Hex.parse(CryptoJS.PBKDF2(data, salt, { keySize: 32, iterations: iterations }).toString(CryptoJS.enc.Hex));
+            this.Compute = function (data, salt, length, rounds) {
+            	var iterations = (typeof rounds === "undefined" || rounds === null) ? 1 : rounds;
+            	length = (typeof length === "undefined" || length === null || length < 32) ? 32 : length;
+            
+                return CryptoJS.enc.Hex.parse(CryptoJS.PBKDF2(data, salt, { keySize: length, iterations: iterations }).toString(CryptoJS.enc.Hex));
             };
         },
         Hash: function () {
@@ -4980,7 +4983,7 @@ var Blackfeather = (function () {
                 var iterations = (typeof rounds === "undefined" || rounds === null) ? 1 : rounds;
 
                 output.Salt = (typeof salt === "undefined" || salt === null) ? new Blackfeather.Security.Cryptology.SecureRandom().NextBytes(8) : salt;
-                output.Data = CryptoJS.SHA256(new Blackfeather.Security.Cryptology.Kdf().Compute(data, CryptoJS.enc.Hex.parse(output.Salt), iterations)).toString(CryptoJS.enc.Hex);
+                output.Data = CryptoJS.SHA256(new Blackfeather.Security.Cryptology.Kdf().Compute(data, CryptoJS.enc.Hex.parse(output.Salt), 32, iterations)).toString(CryptoJS.enc.Hex);
 
                 return output;
             };
@@ -4991,7 +4994,7 @@ var Blackfeather = (function () {
                 var iterations = (typeof rounds === "undefined" || rounds === null) ? 1 : rounds;
 
                 output.Salt = (typeof salt === "undefined" || salt === null) ? new Blackfeather.Security.Cryptology.SecureRandom().NextBytes(8) : salt;
-                output.Data = CryptoJS.HmacSHA256(new Blackfeather.Security.Cryptology.Kdf().Compute(data, CryptoJS.enc.Hex.parse(output.Salt), iterations), new Blackfeather.Security.Cryptology.Kdf().Compute(key, CryptoJS.enc.Hex.parse(output.Salt), iterations)).toString(CryptoJS.enc.Hex);
+                output.Data = CryptoJS.HmacSHA256(data, new Blackfeather.Security.Cryptology.Kdf().Compute(key, CryptoJS.enc.Hex.parse(output.Salt), 32, iterations)).toString(CryptoJS.enc.Hex);
 
                 return output;
             };

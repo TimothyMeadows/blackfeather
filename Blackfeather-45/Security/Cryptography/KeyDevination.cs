@@ -68,7 +68,7 @@ namespace Blackfeather.Security.Cryptography
         /// <param name="salt">Devination salt.</param>
         /// <param name="length">Devination returned byte size.</param>
         /// <returns>SaltedData</returns>
-        public static SaltedData ToKeyDevination(this string data, DevinationType type, byte[] salt = null, int length = 128)
+        public static SaltedData ToKeyDevination(this string data, DevinationType type, byte[] salt = null, int length = 32)
         {
             var saltedData = default(SaltedData);
 
@@ -93,7 +93,7 @@ namespace Blackfeather.Security.Cryptography
         /// <param name="salt">Devination salt.</param>
         /// <param name="length">Devination returned byte size.</param>
         /// <returns>SaltedData</returns>
-        public static SaltedData ToKeyDevination(this byte[] data, DevinationType type, byte[] salt = null, int length = 128)
+        public static SaltedData ToKeyDevination(this byte[] data, DevinationType type, byte[] salt = null, int length = 32)
         {
             var saltedData = default(SaltedData);
 
@@ -110,7 +110,7 @@ namespace Blackfeather.Security.Cryptography
             return saltedData;
         }
 
-        private static SaltedData ToKeyDevination_Pbkdf2(string data, DevinationType type, byte[] salt = null, int length = 128)
+        private static SaltedData ToKeyDevination_Pbkdf2(string data, DevinationType type, byte[] salt = null, int length = 32)
         {
             var salting = salt ?? 16.ToRandomBytes();
             var pbkdf2 = new Rfc2898DeriveBytes(data, salting, PBKDF2_ITERATIONS);
@@ -120,7 +120,7 @@ namespace Blackfeather.Security.Cryptography
             return new SaltedData() { Salt = salting, Data = derived };
         }
 
-        private static SaltedData ToKeyDevination_Pbkdf2(byte[] data, DevinationType type, byte[] salt = null, int length = 128)
+        private static SaltedData ToKeyDevination_Pbkdf2(byte[] data, DevinationType type, byte[] salt = null, int length = 32)
         {
             var salting = salt ?? 16.ToRandomBytes();
             var pbkdf2 = new Rfc2898DeriveBytes(data, salting, PBKDF2_ITERATIONS);
@@ -130,7 +130,7 @@ namespace Blackfeather.Security.Cryptography
             return new SaltedData() { Salt = salting, Data = derived };
         }
 
-        private static SaltedData ToKeyDevination_Scrypt(string data, DevinationType type, byte[] salt = null, int length = 128)
+        private static SaltedData ToKeyDevination_Scrypt(string data, DevinationType type, byte[] salt = null, int length = 32)
         {
             var salting = salt ?? 16.ToRandomBytes();
             var derived = SCrypt.ComputeDerivedKey(new UTF8Encoding().GetBytes(data), salting, SCRYPT_COST, SCRYPT_BLOCKSIZE, SCRYPT_PARALLEL, SCRYPT_MAXTHREADS, length);
@@ -138,7 +138,7 @@ namespace Blackfeather.Security.Cryptography
             return new SaltedData() { Salt = salting, Data = derived };
         }
 
-        private static SaltedData ToKeyDevination_Scrypt(byte[] data, DevinationType type, byte[] salt = null, int length = 128)
+        private static SaltedData ToKeyDevination_Scrypt(byte[] data, DevinationType type, byte[] salt = null, int length = 32)
         {
             var salting = salt ?? 16.ToRandomBytes();
             var derived = SCrypt.ComputeDerivedKey(data, salting, SCRYPT_COST, SCRYPT_BLOCKSIZE, SCRYPT_PARALLEL, SCRYPT_MAXTHREADS, length);
