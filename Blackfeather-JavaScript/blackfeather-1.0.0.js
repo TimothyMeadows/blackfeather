@@ -3,16 +3,16 @@ var Blackfeather = (function () {
     Blackfeather.VERSION = "1.0.0";
 
     Blackfeather.Data = Blackfeather.Data || {};
-    Blackfeather.Serialization = Blackfeather.Serialization || {};
+    Blackfeather.Data.Serialization = Blackfeather.Data.Serialization || {};
 
 	/* Serialization */
-	Blackfeather.Serialization.ManagedMemory = function (json, instance) {
-        if (instance instanceof Blackfeather.Serialization.ManagedMemory) {
+	Blackfeather.Data.Serialization.ManagedMemory = function (json, instance) {
+        if (instance instanceof Blackfeather.Data.Serialization.ManagedMemory) {
             return instance;
         }
 
-        if (!(this instanceof Blackfeather.Serialization.ManagedMemory)) {
-            return new Blackfeather.Serialization.ManagedMemory(instance);
+        if (!(this instanceof Blackfeather.Data.Serialization.ManagedMemory)) {
+            return new Blackfeather.Data.Serialization.ManagedMemory(instance);
         }
         
         JSON = JSON || window.JSON || json;     
@@ -142,6 +142,11 @@ var Blackfeather = (function () {
         
         var Import = this.Import = function(managedMemory) {
         	_memory = managedMemory;
+        }
+
+        var Dispose = this.Dispose = function() {
+            _memory = null;
+            _disposed = true;
         }
     }
 
