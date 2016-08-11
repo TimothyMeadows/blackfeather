@@ -5,7 +5,7 @@ var Blackfeather = (function () {
     Blackfeather.Data = Blackfeather.Data || {};
     Blackfeather.Data.Serialization = Blackfeather.Data.Serialization || {};
 
-	/* Serialization */
+	/* Blackfeather.Data.Serialization */
 	Blackfeather.Data.Serialization.ManagedMemory = function (json, instance) {
         if (instance instanceof Blackfeather.Data.Serialization.ManagedMemory) {
             return instance;
@@ -19,15 +19,15 @@ var Blackfeather = (function () {
         var toJSON = this.toJSON = function(managedMemory) {
         	var memory = managedMemory.Export();
         	return JSON.stringify(memory);
-        }
+        };
         
         var fromJSON = this.fromJSON = function(managedMemory, data) {
         	var managedMemory = JSON.parse(data);
         	managedMemory.Import(managedMemory);
-        }
+        };
 	}
 
-    /* Managed Memory */
+    /* Blackfeather.Data */
     Blackfeather.Data.ManagedMemorySpace = function (pointer, name, value, created, accessed, updated) {
         this.Created = created;
         this.Accessed = accessed;
@@ -68,7 +68,7 @@ var Blackfeather = (function () {
             }
 
             return _memory[pointer][name];
-        }
+        };
 
         var ReadAll = this.ReadAll = function (pointer) {
             if (_disposed) {
@@ -80,7 +80,7 @@ var Blackfeather = (function () {
             }
 
             return _memory[pointer];
-        }
+        };
 
         var Write = this.Write = function (pointer, name, value, created, updated, accessed) {
             if (_disposed) {
@@ -92,7 +92,7 @@ var Blackfeather = (function () {
             }
 
             _memory[pointer][name] = new Blackfeather.Data.ManagedMemorySpace(pointer, name, value, created, updated, accessed);
-        }
+        };
 
         var WriteAll = this.WriteAll = function (spaces) {
             if (_disposed) {
@@ -110,7 +110,7 @@ var Blackfeather = (function () {
 
                 Write(space.pointer, space.name, space.value, space.created, space.updated, space.accessed)
             }
-        }
+        };
 
         var Delete = this.Delete = function (pointer, name) {
             if (typeof _memory[pointer] === 'undefined') {
@@ -122,7 +122,7 @@ var Blackfeather = (function () {
             }
 
             delete _memory[pointer][name];
-        }
+        };
 
         var DeleteAll = this.DeleteAll = function (pointer, name) {
             if (typeof _memory[pointer] === 'undefined') {
@@ -130,25 +130,25 @@ var Blackfeather = (function () {
             }
 
             delete _memory[pointer];
-        }
+        };
 
         var Clear = this.Clear = function () {
             _memory = [];
-        }
+        };
         
         var Export = this.Export = function() {
         	return _memory;
-        }
+        };
         
         var Import = this.Import = function(managedMemory) {
         	_memory = managedMemory;
-        }
+        };
 
         var Dispose = this.Dispose = function() {
             _memory = null;
             _disposed = true;
-        }
-    }
+        };
+    };
 
     /*
    EMBEDDED OPEN SOURCE CODE
