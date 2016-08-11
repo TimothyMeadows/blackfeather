@@ -1,5 +1,4 @@
-# Blackfeather
-C# .NET Framework
+# Blackfeather Framework
 ------------
 
 This framework is a complication of code, features and concepts from Blackfeather Innovation, LLC.
