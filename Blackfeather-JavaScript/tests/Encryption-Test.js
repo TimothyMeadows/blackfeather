@@ -1,8 +1,8 @@
+var Blackfeather = require('../blackfeather-1.0.0');
 var Stopwatch = require("node-stopwatch").Stopwatch;
 var stopwatch = Stopwatch.create();
 
 stopwatch.start();
-var Blackfeather = require('../blackfeather-1.0.0');
 var textEncoding = Blackfeather.Data.Encoding.TextEncoding.Utf8; // Latin1, Utf8, Utf16, Utf16BigEndian and, Utf16LittleEndian supported.
 var text = "caw caw caw!"; // Can be any text matching the specified text encoding.
 var password = "water123";

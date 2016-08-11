@@ -1,8 +1,8 @@
+var Blackfeather = require('../blackfeather-1.0.0');
 var Stopwatch = require("node-stopwatch").Stopwatch;
 var stopwatch = Stopwatch.create();
 
 stopwatch.start();
-var Blackfeather = require('../blackfeather-1.0.0');
 var text = "caw caw caw!";
 var compressed = Blackfeather.Data.Compression.LZString.Compress(text);
 var decompressed = Blackfeather.Data.Compression.LZString.Decompress(compressed);

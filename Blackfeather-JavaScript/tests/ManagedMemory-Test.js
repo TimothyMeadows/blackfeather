@@ -1,8 +1,8 @@
+var Blackfeather = require('../blackfeather-1.0.0');
 var Stopwatch = require("node-stopwatch").Stopwatch;
 var stopwatch = Stopwatch.create();
 
 stopwatch.start();
-var Blackfeather = require('../blackfeather-1.0.0');
 var memory = new Blackfeather.Data.ManagedMemory();
 
 memory.Write("Test", "TestName", "TestValue");

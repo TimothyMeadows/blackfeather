@@ -1,8 +1,8 @@
+var Blackfeather = require('../blackfeather-1.0.0');
 var Stopwatch = require("node-stopwatch").Stopwatch;
 var stopwatch = Stopwatch.create();
 
 stopwatch.start();
-var Blackfeather = require('../blackfeather-1.0.0');
 var text = "caw caw caw!"; // any text should work Utf8, Utf16 have been tested.
 var salt = new Blackfeather.Security.Cryptology.SecureRandom().NextBytes(8); // 8 byte salting required
 var rounds = 1; // more rounds = more cpu, more cpu = more security, must match when re-computed.
