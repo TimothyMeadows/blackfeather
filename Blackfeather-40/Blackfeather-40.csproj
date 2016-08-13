@@ -68,6 +68,7 @@
     <Compile Include="Security\Cryptography\SaltedData.cs" />
     <Compile Include="Security\Cryptography\SecureRandom.cs" />
     <Compile Include="Data\Compression\LZStringCompression.cs" />
+    <Compile Include="Security\Cryptography\KeyExchange.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
