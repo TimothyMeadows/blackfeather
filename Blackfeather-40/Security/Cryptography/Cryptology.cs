@@ -157,7 +157,7 @@ namespace Blackfeather.Security.Cryptography
 
             if (!string.IsNullOrWhiteSpace(secondaryVerifier))
             {
-                data += secondaryVerifier.ToHmac(ToMacDigestType(digestType), devinationType, key.Data, salt).Data.ToHex();
+				data += secondaryVerifier.ToHmac(ToMacDigestType(digestType), devinationType, key.Data, salt).Data.ToBase64();
             }
 
             var input = new UTF8Encoding().GetBytes(data);
@@ -203,6 +203,7 @@ namespace Blackfeather.Security.Cryptography
 
             var suspectedInputVerifier = data.Slice(data.Length - digestLength, data.Length);
             var input = data.Slice(16, data.Length - digestLength);
+
             var expectedInputVerifier = input.ToHmac(ToMacDigestType(digestType), devinationType, key.Data, salt);
             if (!suspectedInputVerifier.SequenceEqual(expectedInputVerifier.Data))
             {
@@ -217,7 +218,7 @@ namespace Blackfeather.Security.Cryptography
             if (!string.IsNullOrWhiteSpace(secondaryVerifier))
             {
                 var expectedVerifier = secondaryVerifier.ToHmac(ToMacDigestType(digestType), devinationType, key.Data, salt).Data.ToHex();
-                var suspectedVerifier = new UTF8Encoding().GetString(outputData.Slice((outputData.Length - 1) - (digestLength*2) + 1, outputData.Length));
+				var suspectedVerifier = new UTF8Encoding().GetString(outputData.Slice((outputData.Length - 1) - (digestLength*2) + 1, outputData.Length)).ToUpper();
                 if (!expectedVerifier.SequenceEqual(suspectedVerifier))
                 {
                     return null;
