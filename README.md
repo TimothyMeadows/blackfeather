@@ -1,9 +1,14 @@
-# Blackfeather Framework
-------------
-
-This framework is a complication of code, features and concepts from Blackfeather Innovation, LLC.
-
-Please report any bugs you find.
-
-You can find releases in the nuget repository:
-https://repository.blackfeatherinnovation.com/
+# Blackfeather in C-Sharp
+#Installing
+Nuget
+```html
+  https://www.nuget.org/packages/Blackfeather/
+```
+Nuget Console
+```bash
+   Install-Package Blackfeather 
+```
+Source
+```bash
+  git clone https://github.com/TimothyMeadows/Blackfeather
+```
