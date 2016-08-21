@@ -45,3 +45,20 @@ Write entry into memory. Remove any previous entry that matches the pointer, and
    var memory = new ManagedMemory();
    memory.Write("birds", "raven", "caw!");
 ```
+##WriteAll(spaces:[ManagedMemorySpace]):void
+Write all entres into memory. Remove any previous entries that matches the pointer, and, name.
+```cs
+   var memory = new ManagedMemory();
+   var spaces = new List<ManagedMemorySpace>();
+   
+   spaces.Add(new ManagedMemorySpace()
+   {
+      Created = 0,
+      Updated = 0,
+      Accessed = 0,
+      Pointer = "birds",
+      Name = "raven",
+      Value = "caw!"
+   });
+   memory.WriteAll(spaces);
+```
