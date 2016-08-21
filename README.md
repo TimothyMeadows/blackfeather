@@ -1,10 +1,7 @@
 # Blackfeather in C-Sharp
 #Installing
 Nuget
-```html
-  https://www.nuget.org/packages/Blackfeather/
-```
-Nuget Console
+###https://www.nuget.org/packages/Blackfeather-JavaScript/
 ```bash
    Install-Package Blackfeather 
 ```
