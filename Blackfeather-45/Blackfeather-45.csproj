@@ -44,9 +44,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="CryptSharp.SCryptSubset, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\SCrypt.2.0.0.2\lib\CryptSharp.SCryptSubset.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\Compression\GZipCompression.cs" />

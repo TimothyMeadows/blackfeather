@@ -24,93 +24,24 @@
 
 using System.Security.Cryptography;
 using System.Text;
-using CryptSharp.Utility;
 
 namespace Blackfeather.Security.Cryptography
 {
     public static class KeyDevination
     {
         /// <summary>
-        /// Supported devination types.
-        /// </summary>
-        public enum DevinationType
-        {
-            Pbkdf2 = 1,
-            Scrypt = 2
-        }
-
-        /// <summary>
         /// PBKDF2 Iteration Count.
         /// </summary>
-        public static int PBKDF2_ITERATIONS = 10000;
-        /// <summary>
-        /// Scrypt CPU Cost. (More = More Secure, Less = Less Secure)
-        /// </summary>
-        public static int SCRYPT_COST = 262144;
-        /// <summary>
-        /// Scrypt blocksize used.
-        /// </summary>
-        public static int SCRYPT_BLOCKSIZE = 8;
-        /// <summary>
-        /// Scrypt parallel threading
-        /// </summary>
-        public static int SCRYPT_PARALLEL = 1;
-        /// <summary>
-        /// Scrypt max thread count
-        /// </summary>
-        public static int? SCRYPT_MAXTHREADS = null;
+        public static int PBKDF2_ITERATIONS = 1;
 
         /// <summary>
-        /// Devinate string data based on supported types.
+        /// Deviate string data based on supported types.
         /// </summary>
         /// <param name="data">Data of any encoding type.</param>
-        /// <param name="type">Supported devination types.</param>
-        /// <param name="salt">Devination salt.</param>
-        /// <param name="length">Devination returned byte size.</param>
+        /// <param name="salt">Divination salt.</param>
+        /// <param name="length">Divination returned byte size.</param>
         /// <returns>SaltedData</returns>
-        public static SaltedData ToKeyDevination(this string data, DevinationType type, byte[] salt = null, int length = 32)
-        {
-            var saltedData = default(SaltedData);
-
-            switch (type)
-            {
-                case DevinationType.Pbkdf2:
-                    saltedData = ToKeyDevination_Pbkdf2(data, type, salt, length);
-                    break;
-                case DevinationType.Scrypt:
-                    saltedData = ToKeyDevination_Scrypt(data, type, salt, length);
-                    break;
-            }
-
-            return saltedData;
-        }
-
-        /// <summary>
-        /// Devinate byte data based on supported types.
-        /// </summary>
-        /// <param name="data">Data of any encoding type.</param>
-        /// <param name="type">Supported devination types.</param>
-        /// <param name="salt">Devination salt.</param>
-        /// <param name="length">Devination returned byte size.</param>
-        /// <returns>SaltedData</returns>
-        public static SaltedData ToKeyDevination(this byte[] data, DevinationType type, byte[] salt = null, int length = 32)
-        {
-            var saltedData = default(SaltedData);
-
-            switch (type)
-            {
-                case DevinationType.Pbkdf2:
-                    saltedData = ToKeyDevination_Pbkdf2(data, type, salt, length);
-                    break;
-                case DevinationType.Scrypt:
-                    saltedData = ToKeyDevination_Scrypt(data, type, salt, length);
-                    break;
-            }
-
-            return saltedData;
-        }
-
-        private static SaltedData ToKeyDevination_Pbkdf2(string data, DevinationType type, byte[] salt = null, int length = 32)
+        public static SaltedData ToKeyDevination(this string data, byte[] salt = null, int length = 32)
         {
             var salting = salt ?? 16.ToRandomBytes();
             var pbkdf2 = new Rfc2898DeriveBytes(data, salting, PBKDF2_ITERATIONS);
@@ -120,28 +51,19 @@ namespace Blackfeather.Security.Cryptography
             return new SaltedData() { Salt = salting, Data = derived };
         }
 
-        private static SaltedData ToKeyDevination_Pbkdf2(byte[] data, DevinationType type, byte[] salt = null, int length = 32)
+        /// <summary>
+        /// Deviate byte data based on supported types.
+        /// </summary>
+        /// <param name="data">Data of any encoding type.</param>
+        /// <param name="salt">Divination salt.</param>
+        /// <param name="length">Divination returned byte size.</param>
+        /// <returns>SaltedData</returns>
+        public static SaltedData ToKeyDevination(this byte[] data, byte[] salt = null, int length = 32)
         {
             var salting = salt ?? 16.ToRandomBytes();
             var pbkdf2 = new Rfc2898DeriveBytes(data, salting, PBKDF2_ITERATIONS);
             var derived = pbkdf2.GetBytes(length);
             pbkdf2.Reset();
-
-            return new SaltedData() { Salt = salting, Data = derived };
-        }
-
-        private static SaltedData ToKeyDevination_Scrypt(string data, DevinationType type, byte[] salt = null, int length = 32)
-        {
-            var salting = salt ?? 16.ToRandomBytes();
-            var derived = SCrypt.ComputeDerivedKey(new UTF8Encoding().GetBytes(data), salting, SCRYPT_COST, SCRYPT_BLOCKSIZE, SCRYPT_PARALLEL, SCRYPT_MAXTHREADS, length);
-
-            return new SaltedData() { Salt = salting, Data = derived };
-        }
-
-        private static SaltedData ToKeyDevination_Scrypt(byte[] data, DevinationType type, byte[] salt = null, int length = 32)
-        {
-            var salting = salt ?? 16.ToRandomBytes();
-            var derived = SCrypt.ComputeDerivedKey(data, salting, SCRYPT_COST, SCRYPT_BLOCKSIZE, SCRYPT_PARALLEL, SCRYPT_MAXTHREADS, length);
 
             return new SaltedData() { Salt = salting, Data = derived };
         }
