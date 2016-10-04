@@ -1,0 +1,15 @@
+{
+  "title": "Blackfeather",
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "NETStandard.Library": "1.6.0",
+    "Portable.BouncyCastle-Signed": "1.7.0.2"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  }
+}
