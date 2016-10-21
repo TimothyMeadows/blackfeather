@@ -12,6 +12,8 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,6 +42,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,15 +55,13 @@
     <Compile Include="Data\Encoding\Base32.cs" />
     <Compile Include="Data\Encoding\BinaryEncoding.cs" />
     <Compile Include="Data\ManagedMemory.cs" />
-    <Compile Include="Data\ManagedMemorySpace.cs" />
-    <Compile Include="Data\Serialization\ManagedMemorySerialization.cs" />
-    <Compile Include="Data\Storage\ManagedMemoryStorage.cs" />
     <Compile Include="Extention\AppendExtension.cs" />
     <Compile Include="Extention\BinaryCompressionExtention.cs" />
     <Compile Include="Extention\CastExtention.cs" />
     <Compile Include="Extention\PrependExtension.cs" />
     <Compile Include="Extention\SliceExtension.cs" />
     <Compile Include="Extention\StringCompressionExtention.cs" />
+    <Compile Include="Extention\UnixTimeExtention.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\Cryptography\Cryptology.cs" />
     <Compile Include="Security\Cryptography\Hash.cs" />

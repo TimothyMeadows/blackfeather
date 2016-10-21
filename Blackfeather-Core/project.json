@@ -4,6 +4,7 @@
 
   "dependencies": {
     "NETStandard.Library": "1.6.0",
+    "Newtonsoft.Json": "9.0.1",
     "Portable.BouncyCastle-Signed": "1.7.0.2"
   },
 

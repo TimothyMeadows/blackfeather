@@ -14,10 +14,37 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization.Json;
+using System.Text;
 
 namespace Blackfeather.Data
 {
+    /// <summary>
+    /// Managed memory entry holder.
+    /// </summary>
+    [Serializable]
+    public struct ManagedMemorySpace
+    {
+        public long Created;
+        public long Accessed;
+        public long Updated;
+        public string Pointer;
+        public string Name;
+        public object Value;
+    }
+
+    public enum ContentDataType
+    {
+        Text = 1,
+        Binary = 2,
+        Xml = 3,
+        Json = 4
+    }
+
     /// <summary>
     /// Managed memory class with serialization support.
     /// </summary>
@@ -241,9 +268,217 @@ namespace Blackfeather.Data
         }
 
         /// <summary>
-        /// Dispose of all current memory. Object must be re-created before it can be used again.
+        /// Load a managed memory object from disk.
         /// </summary>
-        public void Dispose()
+        /// <param name="type">Supported content type.</param>
+        /// <param name="path">Path to memory object on disk.</param>
+        /// <param name="append">Should memory be cleared or left intact before loading?</param>
+        public void Load(ContentDataType type, string path, bool append = false)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                return;
+            }
+
+            var file = File.ReadAllBytes(path);
+            var encodedFile = string.Empty;
+            switch (type)
+            {
+                case ContentDataType.Text:
+                    encodedFile = new UTF8Encoding().GetString(file);
+                    FromText(encodedFile, append);
+                    break;
+                case ContentDataType.Xml:
+                    encodedFile = new UTF8Encoding().GetString(file);
+                    FromXml(encodedFile);
+                    break;
+                case ContentDataType.Json:
+                    encodedFile = new UTF8Encoding().GetString(file);
+                    FromJson(encodedFile);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Save a managed memory object from disk.
+        /// </summary>
+        /// <param name="type">Supported content type.</param>
+        /// <param name="path">Path to memory object on disk.</param>
+        /// <param name="pointer">Optional, pointer you wish to write from.</param>
+        public void Save(ContentDataType type, string path, string pointer = null)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                return;
+            }
+
+            object content = null;
+            switch (type)
+            {
+                case ContentDataType.Text:
+                    content = ToText(pointer);
+                    if (content == null)
+                    {
+                        return;
+                    }
+
+                    File.WriteAllText(path, content.ToString());
+                    break;
+                case ContentDataType.Xml:
+                    content = ToXml(pointer);
+                    if (content == null)
+                    {
+                        return;
+                    }
+
+                    File.WriteAllText(path, content.ToString());
+                    break;
+                case ContentDataType.Json:
+                    content = ToJson(pointer);
+                    if (content == null)
+                    {
+                        return;
+                    }
+
+                    File.WriteAllText(path, content.ToString());
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Serialize data to text, or, basic CSV format.
+        /// </summary>
+        /// <param name="pointer">Optional, pointer you wish to serialize from.</param>
+        /// <returns></returns>
+        public string[] ToText(string pointer = null)
+        {
+            var memoryPointer = new List<string> { "Pointer,Name,Value,Created,Updated,Accessed" };
+            var memoryFragment = string.IsNullOrEmpty(pointer) ? Export() : ExportAll(pointer);
+            memoryPointer.AddRange(memoryFragment.Select(entry => $"\"{entry.Pointer}\",\"{entry.Name}\",\"{entry.Value}\",{entry.Created},{entry.Updated},{entry.Accessed}"));
+
+            return memoryPointer.ToArray();
+        }
+
+        /// <summary>
+        /// Serialize data from text, or, basic CSV format.
+        /// </summary>
+        /// <param name="value">String data, or, CSV data.</param>
+        /// <param name="append">Should memory be cleared or left intact before loading?</param>
+        public void FromText(string value, bool append = false)
+        {
+            if (!append)
+            {
+                Clear();
+            }
+
+            var payload = !value.Contains("\r\n") ? value.Split('\n') : value.Split(new[] { '\r', '\n' }, StringSplitOptions.None);
+            foreach (var csv in payload.Select(payloadLine => payloadLine.Split(',')).Where(csv => csv.Length == 6).Where(csv => csv[5].ToLower() != "accessed"))
+            {
+                Write(csv[0], csv[1], csv[2], Convert.ToInt64(csv[3]), Convert.ToInt64(csv[4]), Convert.ToInt64(csv[5]));
+            }
+        }
+
+        /// <summary>
+        /// Serialize data to binary format.
+        /// </summary>
+        /// <param name="pointer">Optional, pointer you wish to serialize from.</param>
+        /// <returns>Serialized bytes.</returns>
+        public byte[] ToBinary(string pointer = null)
+        {
+            var memorySpace = new MemoryStream();
+            var memoryFragment = string.IsNullOrEmpty(pointer) ? Export() : ExportAll(pointer);
+            new BinaryFormatter().Serialize(memorySpace, memoryFragment);
+
+            var output = memorySpace.ToArray();
+            memorySpace.Dispose();
+
+            return output;
+        }
+
+        /// <summary>
+        /// Serialize from binary format data.
+        /// </summary>
+        /// <param name="value">String data, or, CSV data.</param>
+        /// <param name="append">Should memory be cleared or left intact before loading?</param>
+        public void FromBinary(byte[] value, bool append = false)
+        {
+            var memorySpace = new MemoryStream(value);
+            var memorySpaces = (ManagedMemorySpace[])new BinaryFormatter().Deserialize(memorySpace);
+            memorySpace.Dispose();
+
+            Import(memorySpaces, append);
+        }
+
+        /// <summary>
+        /// Serailize to xml format data.
+        /// </summary>
+        /// <param name="pointer">Optional, pointer you wish to serialize from.</param>
+        /// <returns>String data.</returns>
+        public string ToXml(string pointer = null)
+        {
+            var memorySpace = new MemoryStream();
+            var memoryFragment = string.IsNullOrEmpty(pointer) ? Export() : ExportAll(pointer);
+            var contract = new DataContractSerializer(typeof(ManagedMemorySpace[]));
+            contract.WriteObject(memorySpace, memoryFragment.ToArray());
+
+            var xml = System.Text.Encoding.UTF8.GetString(memorySpace.ToArray());
+            memorySpace.Dispose();
+
+            return xml;
+        }
+
+        /// <summary>
+        /// Serialize from xml format data.
+        /// </summary>
+        /// <param name="value">String data, or, CSV data.</param>
+        /// <param name="append">Should memory be cleared or left intact before loading?</param>
+        public void FromXml(string value, bool append = false)
+        {
+            var memorySpace = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(value));
+            var contract = new DataContractSerializer(typeof(ManagedMemorySpace[]));
+            var memorySpaces = (ManagedMemorySpace[])contract.ReadObject(memorySpace);
+            memorySpace.Dispose();
+
+            Import(memorySpaces, append);
+        }
+
+        /// <summary>
+        /// Serialize to json format data.
+        /// </summary>
+        /// <param name="pointer">Optional, pointer you wish to serialize from.</param>
+        /// <returns>String data</returns>
+        public string ToJson(string pointer = null)
+        {
+            var memorySpace = new MemoryStream();
+            var memoryFilter = string.IsNullOrEmpty(pointer) ? Export() : ExportAll(pointer);
+            var contract = new DataContractJsonSerializer(typeof(ManagedMemorySpace[]));
+            contract.WriteObject(memorySpace, memoryFilter.ToArray());
+
+            var json = System.Text.Encoding.UTF8.GetString(memorySpace.ToArray());
+            memorySpace.Dispose();
+
+            return json;
+        }
+
+        /// <summary>
+        /// Serialize from json format data.
+        /// </summary>
+        /// <param name="value">String data, or, CSV data.</param>
+        /// <param name="append">Should memory be cleared or left intact before loading?</param>
+        public void FromJson(string value, bool append = false)
+        {
+            var memorySpace = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(value));
+            var contract = new DataContractJsonSerializer(typeof(ManagedMemorySpace[]));
+            var memorySpaces = (ManagedMemorySpace[])contract.ReadObject(memorySpace);
+            memorySpace.Dispose();
+
+            Import(memorySpaces, append);
+        }
+
+    /// <summary>
+    /// Dispose of all current memory. Object must be re-created before it can be used again.
+    /// </summary>
+    public void Dispose()
         {
             if (_disposed)
             {
