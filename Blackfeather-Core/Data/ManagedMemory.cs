@@ -37,7 +37,7 @@ namespace Blackfeather.Data
     public enum ContentDataType
     {
         Text = 1,
-        Json = 4
+        Json = 2
     }
 
     /// <summary>

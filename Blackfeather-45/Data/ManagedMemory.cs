@@ -40,9 +40,7 @@ namespace Blackfeather.Data
     public enum ContentDataType
     {
         Text = 1,
-        Binary = 2,
-        Xml = 3,
-        Json = 4
+        Json = 2
     }
 
     /// <summary>
@@ -288,10 +286,6 @@ namespace Blackfeather.Data
                     encodedFile = new UTF8Encoding().GetString(file);
                     FromText(encodedFile, append);
                     break;
-                case ContentDataType.Xml:
-                    encodedFile = new UTF8Encoding().GetString(file);
-                    FromXml(encodedFile);
-                    break;
                 case ContentDataType.Json:
                     encodedFile = new UTF8Encoding().GetString(file);
                     FromJson(encodedFile);
@@ -317,15 +311,6 @@ namespace Blackfeather.Data
             {
                 case ContentDataType.Text:
                     content = ToText(pointer);
-                    if (content == null)
-                    {
-                        return;
-                    }
-
-                    File.WriteAllText(path, content.ToString());
-                    break;
-                case ContentDataType.Xml:
-                    content = ToXml(pointer);
                     if (content == null)
                     {
                         return;
@@ -376,70 +361,6 @@ namespace Blackfeather.Data
             {
                 Write(csv[0], csv[1], csv[2], Convert.ToInt64(csv[3]), Convert.ToInt64(csv[4]), Convert.ToInt64(csv[5]));
             }
-        }
-
-        /// <summary>
-        /// Serialize data to binary format.
-        /// </summary>
-        /// <param name="pointer">Optional, pointer you wish to serialize from.</param>
-        /// <returns>Serialized bytes.</returns>
-        public byte[] ToBinary(string pointer = null)
-        {
-            var memorySpace = new MemoryStream();
-            var memoryFragment = string.IsNullOrEmpty(pointer) ? Export() : ExportAll(pointer);
-            new BinaryFormatter().Serialize(memorySpace, memoryFragment);
-
-            var output = memorySpace.ToArray();
-            memorySpace.Dispose();
-
-            return output;
-        }
-
-        /// <summary>
-        /// Serialize from binary format data.
-        /// </summary>
-        /// <param name="value">String data, or, CSV data.</param>
-        /// <param name="append">Should memory be cleared or left intact before loading?</param>
-        public void FromBinary(byte[] value, bool append = false)
-        {
-            var memorySpace = new MemoryStream(value);
-            var memorySpaces = (ManagedMemorySpace[])new BinaryFormatter().Deserialize(memorySpace);
-            memorySpace.Dispose();
-
-            Import(memorySpaces, append);
-        }
-
-        /// <summary>
-        /// Serailize to xml format data.
-        /// </summary>
-        /// <param name="pointer">Optional, pointer you wish to serialize from.</param>
-        /// <returns>String data.</returns>
-        public string ToXml(string pointer = null)
-        {
-            var memorySpace = new MemoryStream();
-            var memoryFragment = string.IsNullOrEmpty(pointer) ? Export() : ExportAll(pointer);
-            var contract = new DataContractSerializer(typeof(ManagedMemorySpace[]));
-            contract.WriteObject(memorySpace, memoryFragment.ToArray());
-
-            var xml = System.Text.Encoding.UTF8.GetString(memorySpace.ToArray());
-            memorySpace.Dispose();
-
-            return xml;
-        }
-
-        /// <summary>
-        /// Serialize from xml format data.
-        /// </summary>
-        /// <param name="value">String data, or, CSV data.</param>
-        /// <param name="append">Should memory be cleared or left intact before loading?</param>
-        public void FromXml(string value, bool append = false)
-        {
-            var memorySpace = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(value));
-            var contract = new DataContractSerializer(typeof(ManagedMemorySpace[]));
-            var memorySpaces = (ManagedMemorySpace[])contract.ReadObject(memorySpace);
-            memorySpace.Dispose();
-
-            Import(memorySpaces, append);
         }
 
         /// <summary>
