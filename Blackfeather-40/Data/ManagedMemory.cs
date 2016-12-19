@@ -78,7 +78,8 @@ namespace Blackfeather.Data
                     return default(T);
                 }
 
-                var memorySet = memoryPointer.Where(entry => entry.Pointer == pointer).Where(entry => entry.Name == name);
+                var memorySet = memoryPointer.Where(entry => entry.Pointer == pointer)
+                    .Where(entry => entry.Name == name);
                 if (!_memory.Any())
                 {
                     return default(T);
@@ -141,7 +142,8 @@ namespace Blackfeather.Data
         /// <param name="created">Binary time the object was created. (Optional)</param>
         /// <param name="updated">Binary time the object was updated. (Optional)</param>
         /// <param name="accessed">Binary time the object was last accessed. (Optional)</param>
-        public void Write(string pointer, string name, object value, long created = 0, long updated = 0, long accessed = 0)
+        public void Write(string pointer, string name, object value, long created = 0, long updated = 0,
+            long accessed = 0)
         {
             if (_disposed)
             {
@@ -166,12 +168,15 @@ namespace Blackfeather.Data
 
         public void WriteAll(ManagedMemorySpace[] spaces)
         {
-            spaces.ToList().ForEach(entry => Write(entry.Pointer, entry.Name, entry.Value, entry.Created, entry.Updated, entry.Accessed));
+            spaces.ToList()
+                .ForEach(
+                    entry => Write(entry.Pointer, entry.Name, entry.Value, entry.Created, entry.Updated, entry.Accessed));
         }
 
         public void WriteAll(List<ManagedMemorySpace> spaces)
         {
-            spaces.ForEach(entry => Write(entry.Pointer, entry.Name, entry.Value, entry.Created, entry.Updated, entry.Accessed));
+            spaces.ForEach(
+                entry => Write(entry.Pointer, entry.Name, entry.Value, entry.Created, entry.Updated, entry.Accessed));
         }
 
         public void WriteAll(string pointer, Dictionary<string, object> spaces)
@@ -271,7 +276,7 @@ namespace Blackfeather.Data
         /// <param name="type">Supported content type.</param>
         /// <param name="path">Path to memory object on disk.</param>
         /// <param name="append">Should memory be cleared or left intact before loading?</param>
-        public void Load(ContentDataType type, string path, bool append = false)
+        public void Load(ContentDataType type, string path, bool append = false, params Type[] knownTypes)
         {
             if (string.IsNullOrEmpty(path))
             {
@@ -288,7 +293,7 @@ namespace Blackfeather.Data
                     break;
                 case ContentDataType.Json:
                     encodedFile = new UTF8Encoding().GetString(file);
-                    FromJson(encodedFile);
+                    FromJson(encodedFile, append, knownTypes);
                     break;
             }
         }
@@ -299,7 +304,7 @@ namespace Blackfeather.Data
         /// <param name="type">Supported content type.</param>
         /// <param name="path">Path to memory object on disk.</param>
         /// <param name="pointer">Optional, pointer you wish to write from.</param>
-        public void Save(ContentDataType type, string path, string pointer = null)
+        public void Save(ContentDataType type, string path, string pointer = null, params Type[] knownTypes)
         {
             if (string.IsNullOrEmpty(path))
             {
@@ -314,7 +319,7 @@ namespace Blackfeather.Data
                     File.WriteAllText(path, content.ToString());
                     break;
                 case ContentDataType.Json:
-                    content = ToJson(pointer);
+                    content = ToJson(pointer, knownTypes);
                     if (content == null)
                     {
                         return;
@@ -334,7 +339,10 @@ namespace Blackfeather.Data
         {
             var memoryPointer = new List<string> { "Pointer,Name,Value,Created,Updated,Accessed" };
             var memoryFragment = string.IsNullOrEmpty(pointer) ? Export() : ExportAll(pointer);
-            memoryPointer.AddRange(memoryFragment.Select(entry => $"\"{entry.Pointer}\",\"{entry.Name}\",\"{entry.Value}\",{entry.Created},{entry.Updated},{entry.Accessed}"));
+            memoryPointer.AddRange(
+                memoryFragment.Select(
+                    entry =>
+                            $"\"{entry.Pointer}\",\"{entry.Name}\",\"{entry.Value}\",{entry.Created},{entry.Updated},{entry.Accessed}"));
 
             return memoryPointer.ToArray();
         }
@@ -351,8 +359,14 @@ namespace Blackfeather.Data
                 Clear();
             }
 
-            var payload = !value.Contains("\r\n") ? value.Split('\n') : value.Split(new[] { '\r', '\n' }, StringSplitOptions.None);
-            foreach (var csv in payload.Select(payloadLine => payloadLine.Split(',')).Where(csv => csv.Length == 6).Where(csv => csv[5].ToLower() != "accessed"))
+            var payload = !value.Contains("\r\n")
+                ? value.Split('\n')
+                : value.Split(new[] { '\r', '\n' }, StringSplitOptions.None);
+            foreach (
+                var csv in
+                payload.Select(payloadLine => payloadLine.Split(','))
+                    .Where(csv => csv.Length == 6)
+                    .Where(csv => csv[5].ToLower() != "accessed"))
             {
                 Write(csv[0], csv[1], csv[2], Convert.ToInt64(csv[3]), Convert.ToInt64(csv[4]), Convert.ToInt64(csv[5]));
             }
@@ -363,11 +377,11 @@ namespace Blackfeather.Data
         /// </summary>
         /// <param name="pointer">Optional, pointer you wish to serialize from.</param>
         /// <returns>String data</returns>
-        public string ToJson(string pointer = null)
+        public string ToJson(string pointer = null, params Type[] knownTypes)
         {
             var memorySpace = new MemoryStream();
             var memoryFilter = string.IsNullOrEmpty(pointer) ? Export() : ExportAll(pointer);
-            var contract = new DataContractJsonSerializer(typeof(ManagedMemorySpace[]));
+            var contract = new DataContractJsonSerializer(typeof(ManagedMemorySpace[]), knownTypes);
             contract.WriteObject(memorySpace, memoryFilter.ToArray());
 
             var json = System.Text.Encoding.UTF8.GetString(memorySpace.ToArray());
@@ -381,13 +395,13 @@ namespace Blackfeather.Data
         /// </summary>
         /// <param name="value">String data, or, CSV data.</param>
         /// <param name="append">Should memory be cleared or left intact before loading?</param>
-        public void FromJson(string value, bool append = false)
+        public void FromJson(string value, bool append = false, params Type[] knownTypes)
         {
             var memorySpace = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(value));
-            var contract = new DataContractJsonSerializer(typeof(ManagedMemorySpace[]));
+            var contract = new DataContractJsonSerializer(typeof(ManagedMemorySpace[]), knownTypes);
             var memorySpaces = (ManagedMemorySpace[])contract.ReadObject(memorySpace);
-            memorySpace.Dispose();
 
+            memorySpace.Dispose();
             Import(memorySpaces, append);
         }
 
