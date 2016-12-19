@@ -310,12 +310,7 @@ namespace Blackfeather.Data
             switch (type)
             {
                 case ContentDataType.Text:
-                    content = ToText(pointer);
-                    if (content == null)
-                    {
-                        return;
-                    }
-
+                    content = string.Join("\n", ToText(pointer));
                     File.WriteAllText(path, content.ToString());
                     break;
                 case ContentDataType.Json:
