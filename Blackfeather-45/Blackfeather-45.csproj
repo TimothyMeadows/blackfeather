@@ -71,6 +71,7 @@
     <Compile Include="Security\Cryptography\SecureRandom.cs" />
     <Compile Include="Data\Compression\LZStringCompression.cs" />
     <Compile Include="Security\Cryptography\KeyExchange.cs" />
+    <Compile Include="Security\Cryptography\Contract.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

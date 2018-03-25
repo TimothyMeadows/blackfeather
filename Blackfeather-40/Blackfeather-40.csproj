@@ -57,6 +57,7 @@
     <Compile Include="Extention\StringCompressionExtention.cs" />
     <Compile Include="Extention\UnixTimeExtention.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\Cryptography\Contract.cs" />
     <Compile Include="Security\Cryptography\Cryptology.cs" />
     <Compile Include="Security\Cryptography\Hash.cs" />
     <Compile Include="Security\Cryptography\Hmac.cs" />
