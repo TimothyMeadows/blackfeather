@@ -130,15 +130,11 @@ namespace Blackfeather.Security.Cryptography
                     .ToHmac(contract.Private.FromHex()).ToHex();
 
             if (!suspected.Equals(contract.Hash))
-            {
                 throw new InvalidDataException("Contract has been tampered with!");
-            }
 
             var expires = DateTime.FromBinary(contract.Expires);
             if (expires <= DateTime.UtcNow)
-            {
                 throw new InvalidDataException("Contract has expired!");
-            }
 
             var signed = new SignedContract()
             {
@@ -171,20 +167,14 @@ namespace Blackfeather.Security.Cryptography
                     .ToHmac(contract.Private.FromHex()).ToHex();
 
             if (!suspected.Equals(contract.Hash))
-            {
                 throw new InvalidDataException("Contract has been tampered with!");
-            }
 
             if (contract.Signatures.Count + 1 > contract.Participants)
-            {
                 throw new InvalidDataException("Contract already has maximum number of participants!");
-            }
 
             var expires = DateTime.FromBinary(contract.Expires);
             if (expires <= DateTime.UtcNow)
-            {
                 throw new InvalidDataException("Contract has expired!");
-            }
 
             var signatureHash = signature.ToHmac(contract.Private).ToHex();
             contract.Signatures.Add(new Signature()

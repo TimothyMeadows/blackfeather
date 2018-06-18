@@ -53,6 +53,7 @@
     <Compile Include="Extention\AppendExtension.cs" />
     <Compile Include="Extention\BinaryCompressionExtention.cs" />
     <Compile Include="Extention\CastExtention.cs" />
+    <Compile Include="Extention\ObjectExtentions.cs" />
     <Compile Include="Extention\PrependExtension.cs" />
     <Compile Include="Extention\SliceExtension.cs" />
     <Compile Include="Extention\StringCompressionExtention.cs" />
